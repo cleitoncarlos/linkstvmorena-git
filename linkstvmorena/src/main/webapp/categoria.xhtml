@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="cadCategoria">
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+			<p:fieldset legend="Manutenção de Categoria">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Nome: " for="nome" />
+					<p:inputText id="nome"
+						value="#{categoriaController.categoria.nome}" required="true"
+						requiredMessage="Preencha o campo NOME!" />
+
+					<p:commandButton value="Enviar" style=" height:30px"
+						action="#{categoriaController.salvar()}" process="@form"
+						update="@form :cadCategoria">
+
+					</p:commandButton>
+					<p:commandButton value="Cancelar" style=" height:30px"
+						action="#{categoriaController.cancelar()}" process="@form"
+						update="@form :cadCategoria">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</p:fieldset>
+			<p:tab>
+				<br />
+				<p:dataTable id="tabcategoria" paginator="true" rows="5"
+					style="max-width: 550px; min-width: 550px"
+					value="#{categoriaController.listcat}" var="catlist"
+					emptyMessage="Nenhum registro." border="1">
+					<f:facet name="header">
+       				Lista de Categorias
+    				</f:facet>
+					<p:column>
+						<f:facet name="header">ID</f:facet>
+						<h:outputLabel value="#{catlist.id}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Nome</f:facet>
+						<h:outputLabel value="#{catlist.nome}"></h:outputLabel>
+					</p:column>
+
+					<p:column width="70">
+						<f:facet name="header">Ação</f:facet>
+						<p:commandButton
+							actionListener="#{categoriaController.excluir(catlist)}"
+							icon="ui-icon-close" style="width:30px; heigt:30px"
+							process="@this" immediate="true" update="@form :cadCategoria" />
+						<p:commandButton
+							actionListener="#{categoriaController.editar(catlist)}"
+							icon="ui-icon-pencil" style="width:30px; heigt:30px"
+							update="@form :cadCategoria" process="@this" />
+
+						<!-- <p:commandButton
+					actionListener="#"
+					value="Excluir"
+					process="@this" oncomplete="PF('confirmation').show()" immediate="true"/>
+				<p:commandButton
+					actionListener="#"
+					value="Editar" update="@form" process="@this" /> -->
+
+						<!-- <p:growl id="message" showDetail="true" for="exc" />
+						<p:commandButton value="Excluir"
+							actionListener="#"
+							id="exc" update="message" process="@this">
+							<p:confirm header="Confirmation" message="Confirmar Exclusão?"
+								icon="ui-icon-alert" />
+						</p:commandButton>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								actionListener="#"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+								process="@this" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+								update="@form :cadCategoria" process="@this" />
+						</p:confirmDialog>
+						<p:commandButton
+							actionListener="#{usuarioController.editar(usulist)}"
+							value="Editar" update="@form :cadCategoria" process="@this" />
+					-->
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+
+		</h:form>
+		<h:form id="formExcluir">
+			<p:dialog id="Excluir" message="Você gostaria de Deletar?"
+				header="Excluir" severity="alert" widgetVar="confirmation"
+				showDetail="true" resizable="false" closable="false"
+				footer="Confirmar Exclusão?" style="text-align:center">
+				<p:commandButton id="confirm" value="Sim"
+					oncomplete="PF('confirmation').hide()" action="#"
+					update="@form :cadCategoria" />
+				<p:commandButton id="decline" value="Não" actionListener="#"
+					update="@form :cadCategoria" onclick="PF('confirmation').hide()" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

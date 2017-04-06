@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="conteudo">
+		<h1>Controle dos Locais de Link</h1>
+<!-- 
+		<p:commandButton value="Show" type="button" onclick="PF('dlg').show()" />
+		<p:commandButton value="Hide" type="button" onclick="PF('dlg').hide()" />
+
+		<p:panelGrid>
+			<p:row>
+				<p:column rowspan="2">
+					<h:panelGrid columns="2" columnClasses="label, value" layout="grid"
+						styleClass="ui-noborder">
+						<p:outputLabel value="Logradouro: " for="logradouro" />
+						<p:inputText id="logradouro" required="true" />
+						<p:message for="logradouro" display="tooltip" />
+						<p:tooltip for="logradouro" value="Selecione uma categoria" />
+						<p:outputLabel value="CEP: " for="cep" />
+						<p:inputMask mask="99.999-999" id="cep" />
+
+						<p:outputLabel value="Número: " for="numero" />
+						<p:inputText id="numero" />
+
+						<p:outputLabel value="Bairro: " for="bairro" />
+						<p:inputText id="bairro" />
+
+						<p:outputLabel value="Complemento: " for="complemento" />
+						<p:inputText id="complemento" />
+
+						<p:outputLabel value="Observação: " for="descricao" />
+						<p:inputTextarea id="descricao" cols="40" />
+					</h:panelGrid>
+				</p:column>
+				<p:column>
+					<p:panelGrid columns="2" styleClass="ui-noborder" >
+						<p:column>
+						<p:outputLabel value="Vincular Categoria: " />
+</p:column>
+<p:column width="30">
+
+						<p:commandButton id="dialog" value="Cadastrar nova Categoria"
+							icon="ui-icon-extlink" type="button" onclick="PF('dlg').show()" />
+</p:column>
+					</p:panelGrid>
+				</p:column>
+
+			</p:row>
+			<p:column colspan="3">
+				<p:pickList id="pick" value="#{localController.listcategorias}"
+					var="categoria" addLabel="Adicionar" addAllLabel="Selecionar todos"
+					removeLabel="Remover" removeAllLabel="Remover todos"
+					required="true" requiredMessage="Selecione ao menos uma categoria!"
+					itemLabel="#{categoria.nome}" itemValue="#{categoria}" />
+			</p:column>
+			<p:row>
+
+			</p:row>
+
+		</p:panelGrid> -->
+
+	</ui:define>
+
+</ui:composition>
+</html>

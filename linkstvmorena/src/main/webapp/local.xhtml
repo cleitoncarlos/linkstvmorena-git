@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="conteudo">
+		<h2>Manutenção de Link</h2>
+		<h:form id="wiz">
+			<p:messages id="growl" sticky="true" />
+
+			<p:wizard flowListener="#{localController.onFlowProcess}"
+				widgetVar="wizard" styleClass=".ui-wizard-nav-back">
+				<!-- Cadastro de Endereço -->
+				<p:tab id="endereco" title="Endereço">
+					<p:panel header="Detalhes do Endereço">
+						<p:panelGrid>
+							<p:row>
+								<p:column rowspan="2">
+									<h:panelGrid columns="2" columnClasses="label, value"
+										layout="grid" styleClass="ui-noborder">
+
+										<p:outputLabel value="Logradouro: " for="logradouro" />
+										<p:inputText id="logradouro"
+											value="#{localController.local.logradouro}" required="true" />
+										<p:message for="logradouro" display="tooltip" />
+										<p:tooltip for="logradouro" value="Selecione uma categoria" />
+
+										<p:outputLabel value="CEP: " for="cep" />
+										<p:inputMask mask="99.999-999" id="cep"
+											value="#{localController.local.cep}" />
+
+										<p:outputLabel value="Número: " for="numero" />
+										<p:inputText id="numero"
+											value="#{localController.local.numero}" />
+
+										<p:outputLabel value="Bairro: " for="bairro" />
+										<p:inputText id="bairro"
+											value="#{localController.local.bairro}" />
+
+										<p:outputLabel value="Complemento: " for="complemento" />
+										<p:inputText id="complemento"
+											value="#{localController.local.complemento}" />
+
+										<p:outputLabel value="Observação: " for="descricao" />
+										<p:inputTextarea id="descricao" cols="40"
+											value="#{localController.local.descricao}" />
+
+										<p:outputLabel value="Status" for="stlocal" />
+										<p:selectOneMenu id="stlocal" converter="statusLocalConverter"
+											filter="true" value="#{statusLocalController.statuslocal}"
+											required="true">
+											<f:ajax event="change"
+												listener="#{statusLocalController.teste()}" />
+											<f:selectItem noSelectionOption="true">selecione um status</f:selectItem>
+											<f:selectItems
+												value="#{statusLocalController.liststatuslocal}"
+												var="liststatus" itemValue="#{liststatus}"
+												itemLabel="#{liststatus.nome}" />
+
+										</p:selectOneMenu>
+									</h:panelGrid>
+								</p:column>
+								<p:column>
+									<p:panelGrid columns="2" styleClass="ui-noborder">
+										<p:column>
+											<p:outputLabel value="Vincular Categoria: " />
+										</p:column>
+										<p:column width="30">
+
+											<p:commandButton id="dialog" value="Cadastrar nova Categoria"
+												icon="ui-icon-extlink" type="button"
+												onclick="PF('dlg').show()" update="@form" />
+										</p:column>
+									</p:panelGrid>
+								</p:column>
+
+							</p:row>
+							<p:column colspan="3">
+								<p:growl id="msg" escape="false" />
+								<p:pickList id="pick"
+									value="#{categoriaController.listcategorias}" var="categoria"
+									addLabel="Adicionar" required="true"
+									requiredMessage="Ve uma Categoria"
+									addAllLabel="Selecionar todos" removeLabel="Remover"
+									removeAllLabel="Remover todos" itemLabel="#{categoria.nome}"
+									itemValue="#{categoria}" converter="categoriaConverter">
+									<p:ajax event="transfer"
+										listener="#{categoriaController.adicionaCategoria()}"
+										update="msg" />
+								</p:pickList>
+								<!-- <p:ajax event="transfere"
+													listener="localController.onTransfere" update="msg" />
+												<p:ajax event="selecte" listener="localController.onSelecte"
+													update="msg" />
+												<p:ajax event="unselecte"
+													listener="localController.onUnselect" update="msg" />
+												<p:ajax event="reordere" listener="localController.onReordere"
+													update="msg" /> 
+							-->
+							</p:column>
+							<p:row>
+
+							</p:row>
+						</p:panelGrid>
+
+						<h:outputText value="ir para o último: " />
+						<h:selectBooleanCheckbox value="#{localController.skip}" />
+					</p:panel>
+				</p:tab>
+				<!-- Fim Tela de Cadastro de Endereço(Local) -->
+
+				<!-- Cadastro de Ponto -->
+				<p:tab id="ponto" title="Ponto do Link">
+					<p:panel header="Detalhes de onde fecha o Link">
+						<p:messages />
+						<p:panelGrid>
+							<p:row>
+								<p:column rowspan="2">
+									<h:panelGrid columns="2" columnClasses="label, value">
+										<h:outputText value="Descrição: " />
+										<p:inputText value="#{pontoController.ponto.descricao}"
+											size="50" />
+
+										<h:outputText value="Observação: " />
+										<p:inputTextarea cols="49"
+											value="#{pontoController.ponto.observacao}" />
+
+										<p:outputLabel for="stponto" value="Status: " />
+										<p:selectOneMenu id="stponto" converter="statusPontoConverter"
+											filter="true" value="#{statusPontoController.statusPonto}"
+											required="true">
+											<f:ajax event="change"
+												listener="#{statusPontoController.adicionaStatus()}" />
+											<f:selectItem noSelectionOption="true">selecione um status</f:selectItem>
+											<f:selectItems value="#{statusPontoController.liststatus}"
+												var="listastatus" itemValue="#{listastatus}"
+												itemLabel="#{listastatus.nome}" />
+
+										</p:selectOneMenu>
+										<p:commandButton value="Incluir Ponto"
+											update="@form listadeponto"
+											actionListener="#{pontoController.adicionaPonto()}" />
+										<!-- Verificar essa mudança -->
+										<!-- <h:outputText value="Skip to last: " />
+										<h:selectBooleanCheckbox value="#{localController.skip}" /> -->
+
+									</h:panelGrid>
+								</p:column>
+								<p:column
+									style="max-width: 550px; min-width: 550px; vertical-align:top">
+									<p:dataTable id="listadeponto" paginator="false" rows="5"
+										reflow="true"
+										style="max-width: 550px; min-width: 450px; margin-top:0"
+										value="#{pontoController.listadeponto}" var="listponto"
+										emptyMessage="Nenhum registro." styleClass="ui-noborder">
+										<f:facet name="header">Pontos Relacionados</f:facet>
+										<p:column>
+											<f:facet name="header">Descrição</f:facet>
+											<h:outputLabel value="#{listponto.descricao}"></h:outputLabel>
+										</p:column>
+										<p:column>
+											<f:facet name="header">Status</f:facet>
+											<h:outputLabel value="#{listponto.statusponto.nome}"></h:outputLabel>
+										</p:column>
+										<p:column width="70">
+											<f:facet name="header">Ação</f:facet>
+											<p:commandButton actionListener="#" icon="ui-icon-close"
+												style="width:30px; height:20px" process="@this"
+												immediate="true" update="@form" />
+											<p:commandButton actionListener="#" icon="ui-icon-pencil"
+												style="width:30px; height:20px" update="@form"
+												process="@this" />
+
+										</p:column>
+									</p:dataTable>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:panel>
+				</p:tab>
+				<!-- Fim Cadastro de Ponto -->
+
+				<!-- Cadastro de Contato -->
+				<p:tab id="contacto" title="Contato">
+					<p:panel header="Informação do Contato no Local">
+						<p:messages />
+						<p:panelGrid>
+							<p:row>
+								<p:column style="max-width: 550px; min-width: 550px">
+									<h:panelGrid columns="2" columnClasses="label, value">
+
+										<h:outputText value="Nome: " />
+										<p:inputText label="Nome"
+											value="#{contatoController.contato.nome}" />
+
+										<h:outputText value="Sobrenome: " />
+										<p:inputText label="Sobrenome"
+											value="#{contatoController.contato.sobrenome}" />
+
+
+										<h:outputText value="Email: " />
+										<p:inputText label="Email"
+											value="#{contatoController.contato.email}" />
+
+										<h:outputText value="Telefone: " />
+										<p:inputMask mask="(99) 9999-9999"
+											value="#{contatoController.contato.telefone}" />
+
+										<h:outputText value="Celular: " />
+										<p:inputMask mask="(99) 9 9999-9999"
+											value="#{contatoController.contato.celular}" />
+
+
+										<h:outputText value="Status: " />
+										<p:selectOneMenu id="stcontato" 
+											 value="#{contatoController.contato.status}">
+											<f:selectItem noSelectionOption="true">selecione um status</f:selectItem>
+											<f:selectItems value="#{contatoController.listadestatus}"
+												var="listastatus" itemValue="#{listastatus}"
+												itemLabel="#{listastatus}" />
+
+										</p:selectOneMenu>
+
+										<p:commandButton value="Incluir Contato"
+											update="@form listadecontato"
+											actionListener="#{contatoController.adicionaContato()}" />
+									</h:panelGrid>
+								</p:column>
+								<p:column style="vertical-align:top">
+									<p:dataTable id="listadecontato" paginator="false" rows="5"
+										reflow="true" value="#{contatoController.listadecontato}"
+										var="contato" emptyMessage="Nenhum registro."
+										styleClass="ui-noborder">
+										<f:facet name="header">Contato(s) Relacionado(s)</f:facet>
+										<p:column>
+											<f:facet name="header">Nome</f:facet>
+											<h:outputLabel value="#{contato.nome}"></h:outputLabel>
+										</p:column>
+										<p:column>
+											<f:facet name="header">E-mail</f:facet>
+											<h:outputLabel value="#{contato.email}"></h:outputLabel>
+										</p:column>
+										<p:column>
+											<f:facet name="header">Celualar</f:facet>
+											<h:outputLabel value="#{contato.celular}"></h:outputLabel>
+										</p:column>
+
+										<p:column width="70">
+											<f:facet name="header">Ação</f:facet>
+											<p:commandButton actionListener="#" icon="ui-icon-close"
+												style="width:30px; height:20px" process="@this"
+												immediate="true" update="@form" />
+											<p:commandButton actionListener="#" icon="ui-icon-pencil"
+												style="width:30px; height:20px" update="@form"
+												process="@this" />
+
+										</p:column>
+									</p:dataTable>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:panel>
+				</p:tab>
+				<!-- Fim Cadastro de Contato-->
+
+				<!-- Tela de Confirmaçãos Dados -->
+				<p:tab id="confirm" title="Confirmação">
+					<p:panel header="Confirme os dados">
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<h2>Local</h2>
+									<h:panelGrid columns="2" columnClasses="label, value">
+
+										<h:outputText value="Logradouro: " />
+										<h:outputText styleClass="outputLabel"
+											value="#{localController.local.logradouro}" />
+
+										<h:outputText value="CEP: " />
+										<h:outputText styleClass="outputLabel"
+											value="#{localController.local.cep}" />
+
+										<h:outputText value="Número: " />
+										<h:outputText styleClass="outputLabel"
+											value="#{localController.local.numero}" />
+
+										<h:outputText value="Bairro: " />
+										<h:outputText styleClass="outputLabel"
+											value="#{localController.local.bairro}" />
+
+										<h:outputText value="Complemento: " />
+										<h:outputText styleClass="outputLabel"
+											value="#{localController.local.complemento}" />
+
+										<h:outputText value="Obervações: " />
+										<h:outputText styleClass="outputLabel"
+											value="#{localController.local.descricao}" />
+
+										<h:outputText value="Categorias: " />
+										<p:selectOneListbox id="advanced" filterMatchMode="contains">
+											<f:selectItems value="#{localController.listadecategorias}"
+												var="cat" itemLabel="#{cat.nome}" />
+										</p:selectOneListbox>
+
+									</h:panelGrid>
+								</p:column>
+								<p:column style="vertical-align:top">
+									<h2>Ponto</h2>
+
+									<p:dataTable id="listagemdeponto" paginator="false" rows="5"
+										reflow="true"
+										style="max-width: 550px; min-width: 450px; margin-top:0"
+										value="#{pontoController.listadeponto}" var="listponto"
+										emptyMessage="Nenhum registro." styleClass="ui-noborder">
+										<!-- <f:facet name="header">Pontos Relacionados</f:facet> -->
+										<p:column>
+											<f:facet name="header">Descrição</f:facet>
+											<h:outputLabel value="#{listponto.descricao}"></h:outputLabel>
+										</p:column>
+										<p:column>
+											<f:facet name="header">Status</f:facet>
+											<h:outputLabel value="#{listponto.statusponto.nome}"></h:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</p:column>
+								<p:column style="vertical-align:top">
+									<h2>Contato</h2>
+
+									<p:dataTable id="listagemdecontato" paginator="false" rows="5"
+										reflow="true" value="#{contatoController.listadecontato}"
+										var="contato" emptyMessage="Nenhum registro."
+										styleClass="ui-noborder">
+
+										<p:column>
+											<f:facet name="header">Nome</f:facet>
+											<h:outputLabel value="#{contato.nome}"></h:outputLabel>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">Celualar</f:facet>
+											<h:outputLabel value="#{contato.celular}"></h:outputLabel>
+										</p:column>
+
+									</p:dataTable>
+								</p:column>
+
+							</p:row>
+
+						</p:panelGrid>
+						<p:commandButton value="Enviar" action="#{localController.salvar}"
+							update="wiz" process="@form" />
+					</p:panel>
+				</p:tab>
+			</p:wizard>
+
+			<!-- <p:commandButton value="Prev" type="button" onclick="back();" icon="ui-icon-arrowthick-1-w"/>
+			<p:commandButton value="Next" type="button" onclick="next();" icon="ui-icon-arrowthick-1-e"/> -->
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

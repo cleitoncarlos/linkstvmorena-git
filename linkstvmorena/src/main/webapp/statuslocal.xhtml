@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="cadStatus">
+		<p:messages id="messages" autoUpdate="true" closable="true" />
+			<p:fieldset legend="Manutenção de Status do Local">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Nome: " for="nome" />
+					<p:inputText id="nome"
+						value="#{statusLocalController.statuslocal.nome}" required="true"
+						requiredMessage="Preencha o campo NOME!" />
+
+					<p:commandButton value="Enviar" style=" height:30px"
+						action="#{statusLocalController.salvar()}" process="@form"
+						update="@form :cadStatus">
+
+					</p:commandButton>
+					<p:commandButton value="Cancelar" style=" height:30px"
+						action="#{statusLocalController.cancelar()}" process="@form"
+						update="@form :cadStatus">
+
+					</p:commandButton>
+					</p:panelGrid>
+			</p:fieldset>
+			<br />
+			<p:tab>
+				<br />
+				<p:dataTable id="tabstatus" paginator="true" rows="5"
+					style="max-width: 550px; min-width: 550px"
+					value="#{statusLocalController.liststatuslocal}" var="statuslist"
+					emptyMessage="Nenhum registro." border="1">
+					<f:facet name="header">
+       				Lista de Categorias
+    				</f:facet>
+					<p:column>
+						<f:facet name="header">ID</f:facet>
+						<h:outputLabel value="#{statuslist.id}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Nome</f:facet>
+						<h:outputLabel value="#{statuslist.nome}"></h:outputLabel>
+					</p:column>
+
+					<p:column width="70">
+						<f:facet name="header">Ação</f:facet>
+						<p:commandButton
+							actionListener="#{statusLocalController.excluir(statuslist)}"
+							icon="ui-icon-close" style="width:30px; heigt:30px"
+							process="@this" immediate="true" update="@form :cadStatus" />
+						<p:commandButton
+							actionListener="#{statusLocalController.editar(statuslist)}"
+							icon="ui-icon-pencil" style="width:30px; heigt:30px"
+							update="@form :cadStatus" process="@this" />
+
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
