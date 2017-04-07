@@ -96,6 +96,8 @@ public class Controlador {
 	public void adicionaCategoria() {
 		System.out.println("Categoria: "+categoria);
 		lcat = this.listcategorias.getTarget();
+		categoria = (Categoria) listcategorias.getTarget();
+		System.out.println("Categoria: "+categoria);
 		this.local.setCategoria(lcat);
 		System.out.println("Lista de Categoria: "+ lcat);
 		this.listlocal.add(local);
@@ -143,7 +145,7 @@ public class Controlador {
 		System.out.println("\nWizard-Local: " + local.getCategoria());
 		
 		if(this.statuslocal.getId() == 9){
-			System.out.println("Não Fecha Link!!");
+			System.out.println("Nï¿½o Fecha Link!!");
 			//return "confirm";
 		}
 		
