@@ -94,17 +94,10 @@ public class Controlador {
 	}
 
 	public void adicionaCategoria() {
-		System.out.println("Categoria: "+categoria);
 		lcat = this.listcategorias.getTarget();
-		categoria = (Categoria) listcategorias.getTarget();
-		System.out.println("Categoria: "+categoria);
 		this.local.setCategoria(lcat);
-		System.out.println("Lista de Categoria: "+ lcat);
 		this.listlocal.add(local);
-		System.out.println("Lista de Local: "+ listlocal);
 		this.categoria.setLocal(listlocal);
-		System.out.println("Categoria: "+categoria.getLocal());
-		System.out.println("Local: "+local.getCategoria());
 	}
 
 	public void adicionaContato() {
