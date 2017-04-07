@@ -48,7 +48,7 @@ public class Controlador {
 	private List<StatusPonto> liststatusponto;
 	private List<Ponto> listagemdeponto;
 	private DualListModel<Categoria> listcategorias;
-
+	private List<Categoria> lcat;
 	@PostConstruct
 	public void init() {
 		local = new Local();
@@ -64,6 +64,7 @@ public class Controlador {
 		listaponto = new ArrayList<Ponto>();
 		listagemdeponto = new ArrayList<Ponto>();
 		liststatuslocal = new ArrayList<>();
+		lcat = new ArrayList<Categoria>();
 
 		listadestatus = new ArrayList<Status_Contato>();
 		for (Status_Contato lc : Status_Contato.values()) {
@@ -93,13 +94,15 @@ public class Controlador {
 	}
 
 	public void adicionaCategoria() {
-		this.local.setCategoria(this.listcategorias.getTarget());
-		System.out.println("Lista de Categoria: "+ listcategorias.getTarget());
+		System.out.println("Categoria: "+categoria);
+		lcat = this.listcategorias.getTarget();
+		this.local.setCategoria(lcat);
+		System.out.println("Lista de Categoria: "+ lcat);
 		this.listlocal.add(local);
 		System.out.println("Lista de Local: "+ listlocal);
 		this.categoria.setLocal(listlocal);
-		System.out.println("Categoria: "+categoria);
-		System.out.println("Local: "+local);
+		System.out.println("Categoria: "+categoria.getLocal());
+		System.out.println("Local: "+local.getCategoria());
 	}
 
 	public void adicionaContato() {
@@ -131,22 +134,26 @@ public class Controlador {
 	}
 
 	public String onFlowProcess(FlowEvent event) {
-
+		System.out.println("Categoria: "+categoria.getLocal());
 		System.out.println("\nWizard-Local: " + local);
 		System.out.println("Wizard-Contato: " + contato);
 		System.out.println("Wizard-Ponto: " + ponto);
 		System.out.println("Wizard-Categoria: " + categoria);
 		System.out.println("Wizard-StatusLocal: " + statuslocal);
-
+		System.out.println("\nWizard-Local: " + local.getCategoria());
+		
+		if(this.statuslocal.getId() == 9){
+			System.out.println("Não Fecha Link!!");
+			//return "confirm";
+		}
+		
 		if (skip) {
-
 			skip = false; // reset in case user goes back
 			return "confirm";
 		} else {
 
 			return event.getNewStep();
 		}
-
 	}
 
 	public List<Contato> getListadecontato() {
