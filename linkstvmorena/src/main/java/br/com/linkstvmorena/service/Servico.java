@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.linkstvmorena.model.Categoria;
@@ -22,7 +23,7 @@ public class Servico {
 	@PersistenceContext
 	private EntityManager em;
 	
-	@Transactional
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void salvar(Local local) throws Exception {
 		if (local.getId() == null) {
 			Local localBusca = buscaLogradouro(local.getLogradouro());

@@ -2,6 +2,7 @@ package br.com.linkstvmorena.model;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,9 +33,9 @@ public class Local implements Serializable {
 	private String descricao;
 	
 	@ManyToMany( mappedBy="locais", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Contato> contato;
+	private List<Contato> contato = new ArrayList<>();
 	@ManyToMany(mappedBy="locais", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Categoria> categoria;
+	private List<Categoria> categoria = new ArrayList<>();
 	
 	@ManyToOne(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
 	private StatusLocal statuslocal;
@@ -42,7 +43,14 @@ public class Local implements Serializable {
 	@OneToMany(mappedBy="local", cascade=CascadeType.MERGE)
 	private List<Ponto> ponto;
 
-	
+	public void adicionaCategorias(List<Categoria> categorias){
+		this.categoria.addAll(categorias);
+		categorias.forEach(c -> c.getLocal().add(this));
+	}
+	public void adicionaContatos(List<Contato> contatos){
+		this.contato.addAll(contatos);
+		contatos.forEach(c -> c.getLocal().add(this));
+	}
 	public List<Ponto> getPonto() {
 		return ponto;
 	}

@@ -92,15 +92,33 @@ public class Controlador {
 			MenssagemUtil.mensagemErro(e.getMessage());
 		}
 	}
-
+	
 	public void adicionaCategoria() {
-		lcat = this.listcategorias.getTarget();
-		this.local.setCategoria(lcat);
-		this.listlocal.add(local);
-		this.categoria.setLocal(listlocal);
+		this.local.adicionaCategorias(this.listcategorias.getTarget());
 	}
 
-	public void adicionaContato() {
+//	public void adicionaContato() {
+//		this.listadecontato.add(this.contato);
+//		this.local.adicionaContatos(listadecontato);
+//	//	this.contato.setLocal(listlocal);
+//
+//		this.contato = new Contato();
+//		/*this.listadecontato.add(contato);
+//		this.local.setContato(listadecontato);
+//		this.contato.setLocal(listlocal);
+//
+//		this.contato = new Contato();*/
+//	}
+
+
+//	public void adicionaCategoria() {
+//		lcat = this.listcategorias.getTarget();
+//		this.local.setCategoria(lcat);
+//		this.listlocal.add(local);
+//		this.categoria.setLocal(listlocal);
+//	}
+//
+public void adicionaContato() {
 		this.listadecontato.add(contato);
 		this.local.setContato(listadecontato);
 		this.contato.setLocal(listlocal);
