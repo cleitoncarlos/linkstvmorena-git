@@ -97,18 +97,23 @@ public class Controlador {
 		this.local.adicionaCategorias(this.listcategorias.getTarget());
 	}
 
-//	public void adicionaContato() {
-//		this.listadecontato.add(this.contato);
-//		this.local.adicionaContatos(listadecontato);
-//	//	this.contato.setLocal(listlocal);
-//
-//		this.contato = new Contato();
-//		/*this.listadecontato.add(contato);
-//		this.local.setContato(listadecontato);
-//		this.contato.setLocal(listlocal);
-//
-//		this.contato = new Contato();*/
-//	}
+	public void adicionaContato() {
+		/*this.listadecontato.add(this.contato);
+		this.local.adicionaContatos(listadecontato);
+	//	this.contato.setLocal(listlocal);
+
+		this.contato = new Contato();
+		this.listadecontato.add(contato)
+	this.local.setContato(listadecontato);
+		this.contato.setLocal(listlocal);
+
+	this.contato = new Contato();*/
+		this.listadecontato.add(contato);
+		this.local.setContato(listadecontato);
+		this.contato.setLocal(listlocal);
+
+		this.contato = new Contato();
+}
 
 
 //	public void adicionaCategoria() {
@@ -118,13 +123,13 @@ public class Controlador {
 //		this.categoria.setLocal(listlocal);
 //	}
 //
-public void adicionaContato() {
+/*public void adicionaContato() {
 		this.listadecontato.add(contato);
 		this.local.setContato(listadecontato);
 		this.contato.setLocal(listlocal);
 
 		this.contato = new Contato();
-	}
+	}*/
 
 	public void adicionaPonto() {
 		this.listagemdeponto.add(this.ponto);
