@@ -9,61 +9,40 @@
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
 		<h1>Controle dos Locais de Link</h1>
-<!-- 
-		<p:commandButton value="Show" type="button" onclick="PF('dlg').show()" />
-		<p:commandButton value="Hide" type="button" onclick="PF('dlg').hide()" />
-
-		<p:panelGrid>
-			<p:row>
-				<p:column rowspan="2">
-					<h:panelGrid columns="2" columnClasses="label, value" layout="grid"
-						styleClass="ui-noborder">
-						<p:outputLabel value="Logradouro: " for="logradouro" />
-						<p:inputText id="logradouro" required="true" />
-						<p:message for="logradouro" display="tooltip" />
-						<p:tooltip for="logradouro" value="Selecione uma categoria" />
-						<p:outputLabel value="CEP: " for="cep" />
-						<p:inputMask mask="99.999-999" id="cep" />
-
-						<p:outputLabel value="Número: " for="numero" />
-						<p:inputText id="numero" />
-
-						<p:outputLabel value="Bairro: " for="bairro" />
-						<p:inputText id="bairro" />
-
-						<p:outputLabel value="Complemento: " for="complemento" />
-						<p:inputText id="complemento" />
-
-						<p:outputLabel value="Observação: " for="descricao" />
-						<p:inputTextarea id="descricao" cols="40" />
-					</h:panelGrid>
+		<h:form>
+			<p:dataTable id="tabcategoria" paginator="true" rows="5"
+				value="#{controlador.listadelocais}" var="l"
+				emptyMessage="Nenhum registro." border="1">
+				<f:facet name="header">
+       				Lista de Locais
+    				</f:facet>
+				<p:column>
+					<f:facet name="header">Endereço</f:facet>
+					<h:outputLabel value="#{l.logradouro}"></h:outputLabel>
 				</p:column>
 				<p:column>
-					<p:panelGrid columns="2" styleClass="ui-noborder" >
-						<p:column>
-						<p:outputLabel value="Vincular Categoria: " />
-</p:column>
-<p:column width="30">
-
-						<p:commandButton id="dialog" value="Cadastrar nova Categoria"
-							icon="ui-icon-extlink" type="button" onclick="PF('dlg').show()" />
-</p:column>
-					</p:panelGrid>
+					<f:facet name="header">Numero</f:facet>
+					<h:outputLabel value="#{l.numero}"></h:outputLabel>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Status</f:facet>
+					<h:outputLabel value="#{l.contato.nome}"></h:outputLabel>
 				</p:column>
 
-			</p:row>
-			<p:column colspan="3">
-				<p:pickList id="pick" value="#{localController.listcategorias}"
-					var="categoria" addLabel="Adicionar" addAllLabel="Selecionar todos"
-					removeLabel="Remover" removeAllLabel="Remover todos"
-					required="true" requiredMessage="Selecione ao menos uma categoria!"
-					itemLabel="#{categoria.nome}" itemValue="#{categoria}" />
-			</p:column>
-			<p:row>
+				<p:column width="70">
+					<f:facet name="header">Detalhe</f:facet>
+					<p:commandButton
+						actionListener="#{categoriaController.excluir(catlist)}"
+						icon="ui-icon-close" style="width:30px; heigt:30px"
+						process="@this" immediate="true" update="@form" />
+					<p:commandButton
+						actionListener="#{categoriaController.editar(catlist)}"
+						icon="ui-icon-pencil" style="width:30px; heigt:30px"
+						update="@form" process="@this" />
 
-			</p:row>
-
-		</p:panelGrid> -->
+				</p:column>
+			</p:dataTable>
+		</h:form>
 
 	</ui:define>
 

@@ -3,11 +3,12 @@ package br.com.linkstvmorena.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,41 +33,39 @@ public class Local implements Serializable {
 	private String complemento;
 	private String descricao;
 	
-	@ManyToMany( mappedBy="locais", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Contato> contato = new ArrayList<>();
-	@ManyToMany(mappedBy="locais", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Categoria> categoria = new ArrayList<>();
+	@ManyToMany( mappedBy="locais", cascade=CascadeType.MERGE)
+	private Set<Contato> contato = new HashSet<>();
+	@ManyToMany(mappedBy="locais", cascade=CascadeType.MERGE)
+	private List<Categoria> categoria;
 	
-	@ManyToOne(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private StatusLocal statuslocal;
 	
 	@OneToMany(mappedBy="local", cascade=CascadeType.MERGE)
-	private List<Ponto> ponto;
+	private Set<Ponto> ponto;
 
 	public void adicionaCategorias(List<Categoria> categorias){
+		categoria = new ArrayList<>();
 		this.categoria.addAll(categorias);
 		categorias.forEach(c -> c.getLocal().add(this));
 	}
 	public void adicionaContatos(List<Contato> contatos){
 		this.contato.addAll(contatos);
-		contatos.forEach(c -> c.getLocal().add(this));
+		contatos.forEach(c -> c.getLocais().add(this));
 	}
-	public List<Ponto> getPonto() {
+
+	public Set<Ponto> getPonto() {
 		return ponto;
 	}
-
-	public void setPonto(List<Ponto> ponto) {
+	public void setPonto(Set<Ponto> ponto) {
 		this.ponto = ponto;
 	}
-
-	public List<Contato> getContato() {
+	public Set<Contato> getContato() {
 		return contato;
 	}
-
-	public void setContato(List<Contato> contato) {
+	public void setContato(Set<Contato> contato) {
 		this.contato = contato;
 	}
-
 	public Integer getId() {
 		return id;
 	}
@@ -139,13 +138,6 @@ public class Local implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public List<Ponto> getId_ponto() {
-		return ponto;
-	}
-
-	public void setId_ponto(List<Ponto> id_ponto) {
-		this.ponto = id_ponto;
-	}
 
 	@Override
 	public String toString() {

@@ -1,14 +1,15 @@
 package br.com.linkstvmorena.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,20 +31,20 @@ public class Contato implements Serializable{
 	private String celular;
 	private String telefone;
 	
-	@ManyToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Local> locais;
+	@ManyToMany(cascade=CascadeType.MERGE)
+	private Set<Local> locais = new HashSet<>();;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
 	private Status_Contato status;
 
 
-	public List<Local> getLocal() {
+	public Set<Local> getLocais() {
 		return locais;
 	}
 
-	public void setLocal(List<Local> local) {
-		this.locais = local;
+	public void setLocais(Set<Local> locais) {
+		this.locais = locais;
 	}
 
 	public Status_Contato getStatus() {

@@ -1,16 +1,16 @@
 package br.com.linkstvmorena.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Categoria implements Serializable{
@@ -23,9 +23,9 @@ public class Categoria implements Serializable{
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private Integer id;
 	private String nome;
-	
-	@ManyToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
-	private List<Local> locais;
+	@JoinTable
+	@ManyToMany(cascade=CascadeType.MERGE)
+	private List<Local> locais = new ArrayList<>();
 	
 	public Integer getId() {
 		return id;

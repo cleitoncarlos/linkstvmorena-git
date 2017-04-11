@@ -6,10 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.linkstvmorena.model.Categoria;
 import br.com.linkstvmorena.model.Local;
@@ -22,8 +21,8 @@ public class Servico {
 
 	@PersistenceContext
 	private EntityManager em;
-	
-	@Transactional(propagation=Propagation.REQUIRES_NEW)
+
+	@Transactional
 	public void salvar(Local local) throws Exception {
 		if (local.getId() == null) {
 			Local localBusca = buscaLogradouro(local.getLogradouro());
@@ -33,11 +32,12 @@ public class Servico {
 				try {
 					em.merge(local);
 				} catch (Exception e) {
-					throw new Exception("Erro ao cadastrar!: "+e);
+					throw new Exception("Erro ao cadastrar!: " + e);
 				}
 			}
 		}
 	}
+
 	@Transactional
 	public Local buscaLogradouro(String logradouro) throws Exception {
 		try {
@@ -56,16 +56,32 @@ public class Servico {
 
 		}
 	}
+
 	@SuppressWarnings("unchecked")
 	public List<StatusPonto> buscarStatusPonto() {
 		Query consulta = em.createQuery("select s from StatusPonto s order by nome ASC");
 		return consulta.getResultList();
 	}
+
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<Categoria> buscarCategorias() {
-		Query consulta = em.createQuery("select c from Categoria c order by nome ASC");
+		Query consulta = em.createQuery("select c from Categoria c left Join fetch c.locais order by c.nome ASC");
 		return consulta.getResultList();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Local> buscarLocal() {
+		
+		Query consulta = em
+				.createQuery("select DISTINCT l from Local l "+
+						" left Join fetch l.ponto "+
+						" Join fetch l.contato "+
+						"order by l.logradouro ASC");
+		return consulta.getResultList();
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<StatusLocal> buscarStatusLocal() {
 		Query consulta = em.createQuery("select s from StatusLocal s order by nome ASC");

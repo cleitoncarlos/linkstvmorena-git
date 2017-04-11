@@ -34,12 +34,10 @@
 											value="#{controlador.local.cep}" />
 
 										<p:outputLabel value="Número: " for="numero" />
-										<p:inputText id="numero"
-											value="#{controlador.local.numero}" />
+										<p:inputText id="numero" value="#{controlador.local.numero}" />
 
 										<p:outputLabel value="Bairro: " for="bairro" />
-										<p:inputText id="bairro"
-											value="#{controlador.local.bairro}" />
+										<p:inputText id="bairro" value="#{controlador.local.bairro}" />
 
 										<p:outputLabel value="Complemento: " for="complemento" />
 										<p:inputText id="complemento"
@@ -56,8 +54,7 @@
 											<f:ajax event="change"
 												listener="#{controlador.adicionaStatusLocal()}" />
 											<f:selectItem noSelectionOption="true">selecione um status</f:selectItem>
-											<f:selectItems
-												value="#{controlador.liststatuslocal}"
+											<f:selectItems value="#{controlador.liststatuslocal}"
 												var="liststatus" itemValue="#{liststatus}"
 												itemLabel="#{liststatus.nome}" />
 
@@ -81,26 +78,24 @@
 							</p:row>
 							<p:column colspan="3">
 								<p:growl id="msg" escape="false" />
-								<p:pickList id="pick"
-									value="#{controlador.listcategorias}" var="categoria"
-									addLabel="Adicionar" required="true"
-									requiredMessage="Ve uma Categoria"
+								<p:pickList id="pick" value="#{controlador.listcategorias}"
+									var="categoria" addLabel="Adicionar" required="true"
+									requiredMessage="Selecione uma Categoria"
 									addAllLabel="Selecionar todos" removeLabel="Remover"
 									removeAllLabel="Remover todos" itemLabel="#{categoria.nome}"
 									itemValue="#{categoria}" converter="categoriaConverter">
 									<p:ajax event="transfer"
-										listener="#{controlador.adicionaCategoria()}"
-										update="msg" />
-								</p:pickList>
+										listener="#{controlador.adicionaCategoria()}" update="msg" />
 									
+								</p:pickList>
 							</p:column>
 							<p:row>
 
 							</p:row>
 						</p:panelGrid>
-
+<!-- 
 						<h:outputText value="ir para o último: " />
-						<h:selectBooleanCheckbox value="#{localController.skip}" />
+						<h:selectBooleanCheckbox value="#{controlador.skip}" /> -->
 					</p:panel>
 				</p:tab>
 				<!-- Fim Tela de Cadastro de Endereço(Local) -->
@@ -114,8 +109,7 @@
 								<p:column rowspan="2">
 									<h:panelGrid columns="2" columnClasses="label, value">
 										<h:outputText value="Descrição: " />
-										<p:inputText value="#{controlador.ponto.descricao}"
-											size="50" />
+										<p:inputText value="#{controlador.ponto.descricao}" size="50" />
 
 										<h:outputText value="Observação: " />
 										<p:inputTextarea cols="49"
@@ -186,8 +180,7 @@
 									<h:panelGrid columns="2" columnClasses="label, value">
 
 										<h:outputText value="Nome: " />
-										<p:inputText label="Nome"
-											value="#{controlador.contato.nome}" />
+										<p:inputText label="Nome" value="#{controlador.contato.nome}" />
 
 										<h:outputText value="Sobrenome: " />
 										<p:inputText label="Sobrenome"
@@ -208,8 +201,8 @@
 
 
 										<h:outputText value="Status: " />
-										<p:selectOneMenu id="stcontato" 
-											 value="#{controlador.contato.status}">
+										<p:selectOneMenu id="stcontato"
+											value="#{controlador.contato.status}">
 											<f:selectItem noSelectionOption="true">selecione um status</f:selectItem>
 											<f:selectItems value="#{controlador.listadestatus}"
 												var="listastatus" itemValue="#{listastatus}"
@@ -261,7 +254,7 @@
 
 				<!-- Tela de Confirmaçãos Dados -->
 				<p:tab id="confirm" title="Confirmação">
-					<p:panel header="Confirme os dados">
+					<p:panel header="Confirme os dados" >
 						<p:panelGrid>
 							<p:row>
 								<p:column>
@@ -300,7 +293,7 @@
 
 									</h:panelGrid>
 								</p:column>
-								<p:column style="vertical-align:top">
+								<p:column style="vertical-align:top" >
 									<h2>Ponto</h2>
 
 									<p:dataTable id="listagemdeponto" paginator="false" rows="5"
@@ -324,7 +317,7 @@
 									<h2>Contato</h2>
 
 									<p:dataTable id="listagemdecontato" paginator="false" rows="5"
-										reflow="true" value="#{controlador.listadecontato}"
+										reflow="true" value="#{controlador.local.contato}"
 										var="contato" emptyMessage="Nenhum registro."
 										styleClass="ui-noborder">
 

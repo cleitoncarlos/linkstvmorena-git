@@ -150,9 +150,9 @@ public class LocalController {
 			System.out.println("Saiu, LocalController-onFlowProcess: contatoController.adicionaLocal");
 		}*/
 		this.local.setCategoria(this.listadecategorias);
-		this.local.setContato(listcontato);
+		/*this.local.setContato(listcontato);
 		this.local.setPonto(listaponto);
-
+*/
 		System.out.println("\nWizard-Local: " + local);
 		System.out.println("Wizard-Contato: " + contato);
 		System.out.println("Wizard-Ponto: " + ponto);
