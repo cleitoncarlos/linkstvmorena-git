@@ -23,6 +23,12 @@
 									<h:panelGrid columns="2" columnClasses="label, value"
 										layout="grid" styleClass="ui-noborder">
 
+										<p:outputLabel value="None: " for="nomelocal" />
+										<p:inputText id="nomelocal" value="#{controlador.local.nome}"
+											required="true" />
+										<p:message for="nomelocal" display="tooltip" />
+										<p:tooltip for="nomelocal" value="Digite o Nome do Local" />
+
 										<p:outputLabel value="Logradouro: " for="logradouro" />
 										<p:inputText id="logradouro"
 											value="#{controlador.local.logradouro}" required="true" />
@@ -43,9 +49,9 @@
 										<p:inputText id="complemento"
 											value="#{controlador.local.complemento}" />
 
-										<p:outputLabel value="Observação: " for="descricao" />
-										<p:inputTextarea id="descricao" cols="40"
-											value="#{controlador.local.descricao}" />
+										<p:outputLabel value="Observação: " for="observacao" />
+										<p:inputTextarea id="observacao" cols="40"
+											value="#{controlador.local.observacao}" />
 
 										<p:outputLabel value="Status" for="stlocal" />
 										<p:selectOneMenu id="stlocal" converter="statusLocalConverter"
@@ -86,14 +92,14 @@
 									itemValue="#{categoria}" converter="categoriaConverter">
 									<p:ajax event="transfer"
 										listener="#{controlador.adicionaCategoria()}" update="msg" />
-									
+
 								</p:pickList>
 							</p:column>
 							<p:row>
 
 							</p:row>
 						</p:panelGrid>
-<!-- 
+						<!-- 
 						<h:outputText value="ir para o último: " />
 						<h:selectBooleanCheckbox value="#{controlador.skip}" /> -->
 					</p:panel>
@@ -254,13 +260,17 @@
 
 				<!-- Tela de Confirmaçãos Dados -->
 				<p:tab id="confirm" title="Confirmação">
-					<p:panel header="Confirme os dados" >
+					<p:panel header="Confirme os dados">
 						<p:panelGrid>
 							<p:row>
 								<p:column>
 									<h2>Local</h2>
 									<h:panelGrid columns="2" columnClasses="label, value">
 
+										<h:outputText value="Nome: " />
+										<h:outputText styleClass="outputLabel"
+											value="#{controlador.local.nome}" />
+											
 										<h:outputText value="Logradouro: " />
 										<h:outputText styleClass="outputLabel"
 											value="#{controlador.local.logradouro}" />
@@ -283,7 +293,7 @@
 
 										<h:outputText value="Obervações: " />
 										<h:outputText styleClass="outputLabel"
-											value="#{controlador.local.descricao}" />
+											value="#{controlador.local.observacao}" />
 
 										<h:outputText value="Categorias: " />
 										<p:selectOneListbox id="advanced" filterMatchMode="contains">
@@ -293,7 +303,7 @@
 
 									</h:panelGrid>
 								</p:column>
-								<p:column style="vertical-align:top" >
+								<p:column style="vertical-align:top">
 									<h2>Ponto</h2>
 
 									<p:dataTable id="listagemdeponto" paginator="false" rows="5"

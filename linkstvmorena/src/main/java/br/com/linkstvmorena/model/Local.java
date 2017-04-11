@@ -26,12 +26,13 @@ public class Local implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private Integer id;
+	private String nome;
 	private String logradouro;
 	private String cep;
 	private String numero;
 	private String bairro;
 	private String complemento;
-	private String descricao;
+	private String observacao;
 	
 	@ManyToMany( mappedBy="locais", cascade=CascadeType.MERGE)
 	private Set<Contato> contato = new HashSet<>();
@@ -130,20 +131,23 @@ public class Local implements Serializable {
 		this.complemento = complemento;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getNome() {
+		return nome;
 	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
-
-
+	public String getObservacao() {
+		return observacao;
+	}
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
 	@Override
 	public String toString() {
 		return "Local [id=" + id + ", logradouro=" + logradouro + ", cep=" + cep + ", numero=" + numero + ", bairro="
-				+ bairro + ", complemento=" + complemento + ", descricao=" + descricao + ", statuslocal=" + statuslocal
-				+ "]";
+				+ bairro + ", complemento=" + complemento + ", nome=" + nome + ", observacao=" + observacao
+				+ ", statuslocal=" + statuslocal + "]";
 	}
 
 	@Override
@@ -153,10 +157,11 @@ public class Local implements Serializable {
 		result = prime * result + ((bairro == null) ? 0 : bairro.hashCode());
 		result = prime * result + ((cep == null) ? 0 : cep.hashCode());
 		result = prime * result + ((complemento == null) ? 0 : complemento.hashCode());
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((logradouro == null) ? 0 : logradouro.hashCode());
 		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
+		result = prime * result + ((observacao == null) ? 0 : observacao.hashCode());
 		result = prime * result + ((statuslocal == null) ? 0 : statuslocal.hashCode());
 		return result;
 	}
@@ -185,10 +190,10 @@ public class Local implements Serializable {
 				return false;
 		} else if (!complemento.equals(other.complemento))
 			return false;
-		if (descricao == null) {
-			if (other.descricao != null)
+		if (nome == null) {
+			if (other.nome != null)
 				return false;
-		} else if (!descricao.equals(other.descricao))
+		} else if (!nome.equals(other.nome))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -204,6 +209,11 @@ public class Local implements Serializable {
 			if (other.numero != null)
 				return false;
 		} else if (!numero.equals(other.numero))
+			return false;
+		if (observacao == null) {
+			if (other.observacao != null)
+				return false;
+		} else if (!observacao.equals(other.observacao))
 			return false;
 		if (statuslocal == null) {
 			if (other.statuslocal != null)

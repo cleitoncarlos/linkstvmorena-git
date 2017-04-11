@@ -16,6 +16,10 @@
 				<f:facet name="header">
        				Lista de Locais
     				</f:facet>
+    				<p:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputLabel value="#{l.nome}"></h:outputLabel>
+				</p:column>
 				<p:column>
 					<f:facet name="header">Endereço</f:facet>
 					<h:outputLabel value="#{l.logradouro}"></h:outputLabel>
@@ -26,20 +30,15 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Status</f:facet>
-					<h:outputLabel value="#{l.contato.nome}"></h:outputLabel>
+					<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
 				</p:column>
 
-				<p:column width="70">
-					<f:facet name="header">Detalhe</f:facet>
+				<p:column width="50">
+					<f:facet name="header"></f:facet>
 					<p:commandButton
 						actionListener="#{categoriaController.excluir(catlist)}"
-						icon="ui-icon-close" style="width:30px; heigt:30px"
+						icon="ui-icon-search" style="width:30px; heigt:30px"
 						process="@this" immediate="true" update="@form" />
-					<p:commandButton
-						actionListener="#{categoriaController.editar(catlist)}"
-						icon="ui-icon-pencil" style="width:30px; heigt:30px"
-						update="@form" process="@this" />
-
 				</p:column>
 			</p:dataTable>
 		</h:form>
