@@ -85,14 +85,16 @@ public class Controlador {
 		}
 	}
 
-	public void salvar() {
+	public String salvar() {
 		try {
 			servico.salvar(local);
 			init();
 			MenssagemUtil.mensagemInfo("Salvo com Sucesso!!");
+			return "home";
 		} catch (Exception e) {
 			MenssagemUtil.mensagemErro(e.getMessage());
 		}
+		return"";
 	}
 
 	public void adicionaCategoria() {
@@ -113,6 +115,13 @@ public class Controlador {
 		this.contato = new Contato();*/
 	}
 
+	public void carregaCategoria(){
+		List<Categoria> fonte = servico.buscarCategorias();
+		System.out.println("Lista de Categorias: "+fonte);
+		List<Categoria> alvo = new ArrayList<Categoria>();
+		listcategorias = new DualListModel<Categoria>(fonte, alvo);
+	}
+	
 	public void adicionaPonto() {
 		this.listagemdeponto.add(this.ponto);
 		this.local.setPonto(listagemdeponto);

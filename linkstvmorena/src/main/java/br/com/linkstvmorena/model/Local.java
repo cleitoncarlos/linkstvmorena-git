@@ -24,7 +24,7 @@ public class Local implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String nome;
 	private String logradouro;
@@ -37,7 +37,7 @@ public class Local implements Serializable {
 	@ManyToMany( mappedBy="locais", cascade=CascadeType.MERGE)
 	private Set<Contato> contato = new HashSet<>();
 	@ManyToMany(mappedBy="locais", cascade=CascadeType.MERGE)
-	private List<Categoria> categoria;
+	private Set<Categoria> categoria;
 	
 	@ManyToOne(cascade=CascadeType.MERGE)
 	private StatusLocal statuslocal;
@@ -46,7 +46,7 @@ public class Local implements Serializable {
 	private Set<Ponto> ponto;
 
 	public void adicionaCategorias(List<Categoria> categorias){
-		categoria = new ArrayList<>();
+		categoria = new HashSet<>();
 		this.categoria.addAll(categorias);
 		categorias.forEach(c -> c.getLocal().add(this));
 	}
@@ -71,14 +71,12 @@ public class Local implements Serializable {
 		return id;
 	}
 
-	public List<Categoria> getCategoria() {
+	public Set<Categoria> getCategoria() {
 		return categoria;
 	}
-
-	public void setCategoria(List<Categoria> categoria) {
+	public void setCategoria(Set<Categoria> categoria) {
 		this.categoria = categoria;
 	}
-
 	public StatusLocal getStatuslocal() {
 		return statuslocal;
 	}

@@ -1,7 +1,9 @@
 package br.com.linkstvmorena.controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -35,7 +37,7 @@ public class LocalController {
 	private CategoriaService categoriaService;
 	private Local local;
 	private Ponto ponto;
-	private List<Categoria> listadecategorias;
+	private Set<Categoria> listadecategorias;
 	private Contato contato;
 	private StatusLocal statuslocal;
 	private List<Ponto> listaponto;
@@ -52,7 +54,7 @@ public class LocalController {
 	@PostConstruct
 	public void init() {
 		local = new Local();
-		listadecategorias = new ArrayList<Categoria>();
+		listadecategorias = new HashSet<>();
 		listcontato = new ArrayList<Contato>();
 		contato = new Contato();
 		ponto = new Ponto();
@@ -100,7 +102,7 @@ public class LocalController {
 		this.contato = new Contato();
 	}
 
-	public void recebeCategoria(List<Categoria> listcategoria) {
+	public void recebeCategoria(Set<Categoria> listcategoria) {
 		this.listadecategorias = listcategoria;
 
 		System.out.println("LocalController - Lista de Categoria: " + listadecategorias);
@@ -239,11 +241,11 @@ public class LocalController {
 		this.listaponto = listaponto;
 	}
 
-	public List<Categoria> getListadecategorias() {
+	public Set<Categoria> getListadecategorias() {
 		return listadecategorias;
 	}
 
-	public void setListadecategorias(List<Categoria> listadecategorias) {
+	public void setListadecategorias(Set<Categoria> listadecategorias) {
 		this.listadecategorias = listadecategorias;
 	}
 

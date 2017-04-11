@@ -102,45 +102,9 @@
 			<ui:insert name="conteudo" />
 
 		</p:layoutUnit>
-		<p:dialog header="Header Text" widgetVar="dlg" modal="true">//Content</p:dialog>
+		<p:dialog header="Header Text" widgetVar="dlgs" modal="true">//Content</p:dialog>
 
-		<p:dialog header="Nova Categoria" widgetVar="dlg" resizable="false"
-			draggable="false" responsive="true" modal="true" appendToBody="true">
-			<h:form>
-				<!-- <p:panelGrid columns="2" layout="grid"
-					styleClass="ui-panelgrid-blank"
-					columnClasses="ui-grid-col-4,ui-grid-col-8">
-					<h:outputLabel for="username" value="Username:" />
-					<p:inputText id="username" />
-
-					<h:outputLabel for="password" value="Password:" />
-					<p:password id="password" />
-
-					<f:facet name="footer">
-						<p:commandButton value="Login" type="button"
-							onclick="PF('dlg').hide()" />
-					</f:facet>
-				</p:panelGrid> -->
-				<p:messages id="messages" autoUpdate="true" closable="true" />
-				<p:panelGrid columns="2">
-					<p:outputLabel value="Nome: " for="nome" />
-					<p:inputText id="nome"
-						value="#{categoriaController.categoria.nome}" required="true"
-						requiredMessage="Preencha o campo NOME!" />
-
-					<p:commandButton value="Enviar" style=" height:30px"
-						action="#{categoriaController.salvar()}" process="@form"
-						update="@form">
-
-					</p:commandButton>
-					<p:commandButton value="Cancelar" style=" height:30px"
-						action="#{categoriaController.cancelar()}"
-						onclick="PF('dlg').hide()" process="@this" update="@form">
-
-					</p:commandButton>
-				</p:panelGrid>
-			</h:form>
-		</p:dialog>
+		
 	</p:layout>
 </h:body>
 </html>

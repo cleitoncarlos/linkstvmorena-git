@@ -9,6 +9,7 @@
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
 		<h1>Controle dos Locais de Link</h1>
+		<p:growl />
 		<h:form>
 			<p:dataTable id="tabcategoria" paginator="true" rows="5"
 				value="#{controlador.listadelocais}" var="l"
@@ -33,7 +34,7 @@
 					<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
 				</p:column>
 
-				<p:column width="50">
+				<p:column width="32">
 					<f:facet name="header"></f:facet>
 					<p:commandButton
 						actionListener="#{categoriaController.excluir(catlist)}"

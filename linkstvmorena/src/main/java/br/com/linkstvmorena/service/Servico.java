@@ -6,9 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.linkstvmorena.model.Categoria;
 import br.com.linkstvmorena.model.Local;
@@ -25,7 +24,7 @@ public class Servico {
 	@Transactional
 	public void salvar(Local local) throws Exception {
 		if (local.getId() == null) {
-			Local localBusca = buscaLogradouro(local.getLogradouro());
+			Local localBusca = buscaNomeLocal(local.getLogradouro());
 			if (localBusca != null) {
 				throw new ServiceException("Local ja  Cadastrado!", null);
 			} else {
@@ -39,13 +38,13 @@ public class Servico {
 	}
 
 	@Transactional
-	public Local buscaLogradouro(String logradouro) throws Exception {
+	public Local buscaNomeLocal(String logradouro) throws Exception {
 		try {
-			String jpql = "Select l from Local l where lower(l.logradouro)=lower(:logParam)";
+			String jpql = "Select l from Local l where lower(l.nome)=lower(:nomeParam)";
 
 			Query consulta = em.createQuery(jpql);
 
-			consulta.setParameter("logParam", logradouro);
+			consulta.setParameter("nomeParam", logradouro);
 			consulta.setMaxResults(1);
 			return (Local) consulta.getSingleResult();
 		} catch (NoResultException e) {
@@ -77,7 +76,7 @@ public class Servico {
 		Query consulta = em
 				.createQuery("select DISTINCT l from Local l "+
 						" left Join fetch l.ponto "+
-						" Join fetch l.contato "+
+						" left Join fetch l.contato "+
 						"order by l.logradouro ASC");
 		return consulta.getResultList();
 	}
