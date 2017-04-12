@@ -1,4 +1,5 @@
 package br.com.linkstvmorena.service;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -22,13 +23,15 @@ public class Servico {
 
 	@Transactional
 	public void salvar(Local local) throws Exception {
+		System.out.println("Servivo Local: " + local);
 		if (local.getId() == null) {
-			Local localBusca = buscaNomeLocal(local.getLogradouro());
+			Local localBusca = buscaNomeLocal(local.getNome());
 			if (localBusca != null) {
 				throw new ServiceException("Local ja  Cadastrado!", null);
 			} else {
 				try {
 					em.merge(local);
+					System.out.println("Entrei no merge: " + local);
 				} catch (Exception e) {
 					throw new Exception("Erro ao cadastrar!: " + e);
 				}
@@ -37,13 +40,13 @@ public class Servico {
 	}
 
 	@Transactional
-	public Local buscaNomeLocal(String logradouro) throws Exception {
+	public Local buscaNomeLocal(String nome) throws Exception {
 		try {
 			String jpql = "Select l from Local l where lower(l.nome)=lower(:nomeParam)";
 
 			Query consulta = em.createQuery(jpql);
 
-			consulta.setParameter("nomeParam", logradouro);
+			consulta.setParameter("nomeParam", nome);
 			consulta.setMaxResults(1);
 			return (Local) consulta.getSingleResult();
 		} catch (NoResultException e) {
@@ -71,13 +74,9 @@ public class Servico {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<Local> buscarLocal() {
-		
-		Query consulta = em
-				.createQuery("select DISTINCT l from Local l "+
-						" left Join fetch l.ponto "+
-						" left Join fetch l.contato "+
-						" left Join fetch l.categoria "+
-						"order by l.logradouro ASC");
+
+		Query consulta = em.createQuery("select DISTINCT l from Local l " + " left Join fetch l.ponto "
+				+ " left Join fetch l.contato " + " left Join fetch l.categoria " + "order by l.logradouro ASC");
 		return consulta.getResultList();
 	}
 

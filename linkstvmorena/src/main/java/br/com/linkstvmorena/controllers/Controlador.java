@@ -76,6 +76,7 @@ public class Controlador {
 			listadelocais = servico.buscarLocal();
 			System.out.println("Lista de Locais: "+listadelocais);
 			liststatuslocal = servico.buscarStatusLocal();
+			System.out.println("StatusLocal: " + liststatuslocal);
 			liststatusponto = servico.buscarStatusPonto();
 			List<Categoria> fonte = servico.buscarCategorias();
 			System.out.println("Lista de Categorias: "+fonte);

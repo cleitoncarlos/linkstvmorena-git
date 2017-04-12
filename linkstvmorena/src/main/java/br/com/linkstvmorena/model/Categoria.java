@@ -1,15 +1,14 @@
 package br.com.linkstvmorena.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 @Entity
@@ -23,9 +22,9 @@ public class Categoria implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String nome;
-	@JoinTable
+	
 	@ManyToMany(cascade=CascadeType.MERGE)
-	private List<Local> locais = new ArrayList<>();
+	private Set<Local> locais = new HashSet<>();
 	
 	public Integer getId() {
 		return id;
@@ -40,10 +39,10 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 	
-	public List<Local> getLocal() {
+	public Set<Local> getLocal() {
 		return locais;
 	}
-	public void setLocal(List<Local> local) {
+	public void setLocal(Set<Local> local) {
 		this.locais = local;
 	}
 	@Override
