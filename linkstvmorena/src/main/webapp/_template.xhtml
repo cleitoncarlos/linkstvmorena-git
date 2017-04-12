@@ -3,8 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui" 
-	xmlns:o="http://omnifaces.org/ui"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions">
 
 <h:head>
@@ -23,6 +22,11 @@
 		return window.confirm("Confirma Exclusão?");
 }
 	</script>
+	<style type="text/css">
+.ui-datalist-content{
+	border: 0px;
+}
+</style>s
 </h:head>
 <h:body>
 	<p:layout fullPage="true">
@@ -69,7 +73,8 @@
 						<p:menuitem value="Excluir" icon="ui-icon-close" />
 					</p:submenu>
 					<p:submenu label="Local">
-						<p:menuitem value="Cadastrar" icon="ui-icon-disk" action="localteste" />
+						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
+							action="localteste" />
 						<p:menuitem value="Alterar" icon="ui-icon-arrowrefresh-1-w" />
 						<p:menuitem value="Excluir" icon="ui-icon-close" />
 					</p:submenu>
@@ -99,12 +104,51 @@
 
 		<p:layoutUnit position="center" style="border:0">
 
-			<ui:insert name="conteudo" />
+			<ui:insert name="conteudo">
+
+
+			</ui:insert>
 
 		</p:layoutUnit>
-		<p:dialog header="Header Text" widgetVar="dlgs" modal="true">//Content</p:dialog>
+		<p:dialog header="Header Text" widgetVar="dlg" modal="true">//Content</p:dialog>
 
-		
+		<p:dialog header="Nova Categoria" widgetVar="dlg" resizable="false"
+			draggable="false" responsive="true" modal="true" appendToBody="true">
+			<h:form>
+				<!-- <p:panelGrid columns="2" layout="grid"
+					styleClass="ui-panelgrid-blank"
+					columnClasses="ui-grid-col-4,ui-grid-col-8">
+					<h:outputLabel for="username" value="Username:" />
+					<p:inputText id="username" />
+
+					<h:outputLabel for="password" value="Password:" />
+					<p:password id="password" />
+
+					<f:facet name="footer">
+						<p:commandButton value="Login" type="button"
+							onclick="PF('dlg').hide()" />
+					</f:facet>
+				</p:panelGrid> -->
+				<p:messages id="messages" autoUpdate="true" closable="true" />
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Nome: " for="nome" />
+					<p:inputText id="nome"
+						value="#{categoriaController.categoria.nome}" required="true"
+						requiredMessage="Preencha o campo NOME!" />
+
+					<p:commandButton value="Enviar" style=" height:30px"
+						action="#{categoriaController.salvar()}" process="@form"
+						update="@form">
+
+					</p:commandButton>
+					<p:commandButton value="Cancelar" style=" height:30px"
+						action="#{categoriaController.cancelar()}"
+						onclick="PF('dlg').hide()" process="@this" update="@form">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
 	</p:layout>
 </h:body>
 </html>

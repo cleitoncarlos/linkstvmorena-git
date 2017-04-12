@@ -1,5 +1,6 @@
 package br.com.linkstvmorena.controllers;
 
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,7 @@ public class Controlador {
 	private Servico servico;
 
 	private Local local;
+	private Local selectedLocal;
 	private Ponto ponto;
 	private Categoria categoria;
 	private Contato contato;
@@ -84,6 +86,11 @@ public class Controlador {
 			MenssagemUtil.mensagemErro("Nao Foi Possivel Carregar a Lista!!" + e.getMessage());
 		}
 	}
+	
+	public void liberaSelecaoLocal() {
+		selectedLocal = new Local();
+		System.out.println("Entrou!!");
+	}
 
 	public String salvar() {
 		try {
@@ -111,7 +118,6 @@ public class Controlador {
 		/*this.listadecontato.add(contato);
 		this.local.setContato(listadecontato);
 		this.contato.setLocal(listlocal);
-
 		this.contato = new Contato();*/
 	}
 
@@ -273,6 +279,14 @@ public class Controlador {
 
 	public void setListaponto(List<Ponto> listaponto) {
 		this.listaponto = listaponto;
+	}
+
+	public Local getSelectedLocal() {
+		return selectedLocal;
+	}
+
+	public void setSelectedLocal(Local selectedLocal) {
+		this.selectedLocal = selectedLocal;
 	}
 
 	public void onTransfer(TransferEvent event) {

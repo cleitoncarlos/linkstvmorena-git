@@ -1,5 +1,4 @@
 package br.com.linkstvmorena.service;
-
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -77,6 +76,7 @@ public class Servico {
 				.createQuery("select DISTINCT l from Local l "+
 						" left Join fetch l.ponto "+
 						" left Join fetch l.contato "+
+						" left Join fetch l.categoria "+
 						"order by l.logradouro ASC");
 		return consulta.getResultList();
 	}
