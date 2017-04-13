@@ -1,11 +1,11 @@
 package br.com.linkstvmorena.service;
-
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +23,16 @@ public class Servico {
 
 	@Transactional
 	public void salvar(Local local) throws Exception {
-		System.out.println("Servivo Local: " + local);
+		System.out.println("Entrou em Salvar-Local: "+local);
 		if (local.getId() == null) {
 			Local localBusca = buscaNomeLocal(local.getNome());
+			System.out.println("Entrou em Salvar-LocalBusca: "+localBusca);
 			if (localBusca != null) {
 				throw new ServiceException("Local ja  Cadastrado!", null);
 			} else {
 				try {
+					System.out.println("Entrou no Merge-Local: "+local);
 					em.merge(local);
-					System.out.println("Entrei no merge: " + local);
 				} catch (Exception e) {
 					throw new Exception("Erro ao cadastrar!: " + e);
 				}
@@ -43,9 +44,7 @@ public class Servico {
 	public Local buscaNomeLocal(String nome) throws Exception {
 		try {
 			String jpql = "Select l from Local l where lower(l.nome)=lower(:nomeParam)";
-
 			Query consulta = em.createQuery(jpql);
-
 			consulta.setParameter("nomeParam", nome);
 			consulta.setMaxResults(1);
 			return (Local) consulta.getSingleResult();
@@ -53,11 +52,36 @@ public class Servico {
 			// engolir a exception
 			return null;
 		} catch (Exception causa) {
-			throw new Exception("Erro ao Buscar Logradouro!! " + causa);
-
+			throw new Exception("Erro ao Buscar Nome do Local!! " + causa);
 		}
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Local> buscarLocal() {
+		
+		Query consulta = em
+				.createQuery("select DISTINCT l from Local l "+
+						" left Join fetch l.ponto "+
+						" left Join fetch l.contato "+
+						" left Join fetch l.categoria "+
+						"order by l.nome ASC");
+		return consulta.getResultList();
+	}
+	@SuppressWarnings("unchecked")
+	public List<Local> buscarPorId(Integer id)  throws ServiceException{
+		String busca ="select DISTINCT l from Local l "+
+						" left Join fetch l.ponto "+
+						" left Join fetch l.contato "+
+						" Join fetch l.categoria "+
+						" Where l.id=:idParam "+
+						"order by l.nome ASC";
+		
+		Query consulta = em.createQuery(busca);
+		consulta.setParameter("idParam", id);
+		return consulta.getResultList();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<StatusPonto> buscarStatusPonto() {
 		Query consulta = em.createQuery("select s from StatusPonto s order by nome ASC");
@@ -72,18 +96,11 @@ public class Servico {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional
-	public List<Local> buscarLocal() {
-
-		Query consulta = em.createQuery("select DISTINCT l from Local l " + " left Join fetch l.ponto "
-				+ " left Join fetch l.contato " + " left Join fetch l.categoria " + "order by l.logradouro ASC");
-		return consulta.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
 	public List<StatusLocal> buscarStatusLocal() {
 		Query consulta = em.createQuery("select s from StatusLocal s order by nome ASC");
 		return consulta.getResultList();
 	}
+
+	
 
 }

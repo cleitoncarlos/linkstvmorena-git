@@ -8,10 +8,11 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
-		<h1>Controle dos Locais de Link</h1>
+		<h1>Relação dos Locais de Link</h1>
 		<p:growl />
 		<h:form id="formhome">
-			<p:dataTable id="tabcategoria" paginator="true" rows="5"
+			<p:dataTable id="tabcategoria" paginator="true"
+				paginatorPosition="bottom" rows="5"
 				value="#{controlador.listadelocais}" var="l"
 				emptyMessage="Nenhum registro." border="1">
 				<f:facet name="header">
@@ -34,28 +35,38 @@
 					<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
 				</p:column>
 
-				<p:column width="32">
-					<f:facet name="header"></f:facet>
-					<p:commandButton 
-						icon="ui-icon-search" style="width:30px; heigt:30px"
-						process="@this" update=":formhome:localDetail:"
+				<p:column>
+					<f:facet name="header">Ação</f:facet>
+					<p:commandButton icon="ui-icon-search"
+						style="width:30px; heigt:30px" process="@this"
+						title="Ver Detalhes" update=":formhome:localDetail:"
 						onclick="PF('localDialog').show()">
 						<f:setPropertyActionListener value="#{l}"
 							target="#{controlador.selectedLocal}" />
 					</p:commandButton>
+					<p:commandButton
+						actionListener="#{controlador.editar(l)}"
+						title="Editar" icon="ui-icon-pencil"
+						style="width:30px; heigt:30px" update="@form" process="@this" />
+
+					<p:commandButton
+						actionListener="#{controlador.excluir(l)}"
+						title="Excluir" icon="ui-icon-close"
+						style="width:30px; heigt:30px" process="@this" immediate="true"
+						update="@form " />
+
 				</p:column>
 			</p:dataTable>
 
-			<p:dialog header="#{controlador.selectedLocal.nome}" 
+			<p:dialog header="#{controlador.selectedLocal.nome}"
 				widgetVar="localDialog" modal="false" showEffect="fade"
-				hideEffect="fade" resizable="false" >
+				hideEffect="fade" resizable="false">
 				<p:outputPanel id="localDetail" style="text-align:none;"
 					styleClass="ui-noborder">
 
-					<p:carousel value="#{controlador.selectedLocal}"
-						headerText="Local" var="local" numVisible="1"
-						itemStyle="height:120px;" easing="easeOutBounce"
-						style="width:450px" cricular="true">
+					<p:carousel value="#{controlador.selectedLocal}" headerText="Local"
+						var="local" numVisible="1" itemStyle="height:120px;"
+						easing="easeOutBounce" style="width:450px" cricular="true">
 						<p:panelGrid columns="2" styleClass="ui-noborder"
 							columnClasses="label,value">
 
@@ -78,13 +89,13 @@
 					<br />
 
 					<p:carousel value="#{controlador.selectedLocal.ponto}"
-						headerText="Ponto" var="ponto" numVisible="1" styleClass="ui-noborder"
-						itemStyle="height:auto;" easing="easeOutBounce"
-						style="width:450px" cricular="true">
+						headerText="Ponto" var="ponto" numVisible="1"
+						itemStyle="height:auto;" 
+						style="width:450px">
 
 						<p:panelGrid columns="2" styleClass="ui-noborder"
 							rendered="#{not empty controlador.selectedLocal}"
-							columnClasses="label,value" >
+							columnClasses="label,value">
 
 							<h:outputText value="Descrição:" />
 							<h:outputText value="#{ponto.descricao}" />
@@ -100,9 +111,9 @@
 					<br />
 					<p:carousel value="#{controlador.selectedLocal.contato}"
 						headerText="Contato" var="contato" numVisible="1"
-						itemStyle="height:auto;" easing="easeOutBounce"
-						style="width:450px" cricular="true">
-						
+						itemStyle="height:auto;" 
+						style="width:450px">
+
 						<p:panelGrid columns="2" styleClass="ui-noborder"
 							rendered="#{not empty controlador.selectedLocal}"
 							columnClasses="label,value">

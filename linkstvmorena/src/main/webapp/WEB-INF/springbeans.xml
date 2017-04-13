@@ -19,7 +19,7 @@
 		<property name="driverClassName" value="org.postgresql.Driver" />
 		<property name="username" value="cleitoncarlos" />
 		<property name="password" value="root123" />
-		<property name="url" value="jdbc:postgresql://localhost:5433/links" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/links" />
 	</bean>
 
 	 <bean id="entityManagerFactory"

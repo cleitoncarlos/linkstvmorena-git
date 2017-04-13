@@ -3,6 +3,7 @@ package br.com.linkstvmorena.controllers;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +52,11 @@ public class Controlador {
 	private List<StatusPonto> liststatusponto;
 	private Set<Ponto> listagemdeponto;
 	private DualListModel<Categoria> listcategorias;
+	private List<Local> listalocal;
+	List<Categoria> fonte;
+	List<Categoria> alvo;
+
+	
 
 	@PostConstruct
 	public void init() {
@@ -74,13 +80,10 @@ public class Controlador {
 
 		try {
 			listadelocais = servico.buscarLocal();
-			System.out.println("Lista de Locais: "+listadelocais);
 			liststatuslocal = servico.buscarStatusLocal();
-			System.out.println("StatusLocal: " + liststatuslocal);
 			liststatusponto = servico.buscarStatusPonto();
-			List<Categoria> fonte = servico.buscarCategorias();
-			System.out.println("Lista de Categorias: "+fonte);
-			List<Categoria> alvo = new ArrayList<Categoria>();
+			fonte = servico.buscarCategorias();
+			alvo = new ArrayList<Categoria>();
 			listcategorias = new DualListModel<Categoria>(fonte, alvo);
 
 		} catch (Exception e) {
@@ -105,6 +108,44 @@ public class Controlador {
 		return"";
 	}
 
+	public Local editar (Local l){
+		try {
+			listalocal = new ArrayList<Local>();
+			listalocal = servico.buscarPorId(l.getId());
+			for (Local ls : listalocal) {
+				this.listagemdeponto = ls.getPonto();
+				this.listadecontato =  ls.getContato();
+				this.statuslocal = ls.getStatuslocal();
+				this.statuslocal = ls.getStatuslocal();
+				
+			Iterator<Categoria> catit = ls.getCategoria().iterator();
+			System.out.println("Iterator-catit: "+catit.next());
+			Categoria ct = catit.next();
+			System.out.println("Iterator-ct "+ct);
+			this.fonte.remove(catit.next());
+			
+			while(catit.hasNext()){
+				//Categoria ct = catit.next();
+				System.out.println("Iterator-ct: " +ct);
+				if (ct.equals(ls.getCategoria())){
+					System.out.println("Iterator: "+ct);
+					this.fonte.remove(ct);
+				}
+			}
+				
+				System.out.println("Editar-Lsita de Categoria-Fonte: "+this.fonte);
+				this.local =ls;
+			}
+			
+			System.out.println("Editar-Lsita de Ponto: "+this.listagemdeponto);
+			System.out.println("Editar-Lsita de Contato: "+this.listadecontato);
+			System.out.println("Editar-Local: "+this.local);
+			return this.local;
+		} catch (Exception e) {
+			return null;
+		}
+	
+	}
 	public void adicionaCategoria() {
 		this.local.adicionaCategorias(this.listcategorias.getTarget());
 	}
@@ -112,14 +153,7 @@ public class Controlador {
 	public void adicionaContato() {
 		this.listadecontato.add(this.contato);
 		this.local.adicionaContatos(listadecontato);
-		
-	//	this.contato.setLocal(listlocal);
-
 		this.contato = new Contato();
-		/*this.listadecontato.add(contato);
-		this.local.setContato(listadecontato);
-		this.contato.setLocal(listlocal);
-		this.contato = new Contato();*/
 	}
 
 	public void carregaCategoria(){
@@ -150,15 +184,6 @@ public class Controlador {
 	}
 
 	public String onFlowProcess(FlowEvent event) {
-		
-		/*if(this.local.getCategoria().isEmpty())
-			this.local.adicionaCategorias(this.listcategorias.getTarget());*/
-		
-		System.out.println("\nWizard-Local: " + local);
-		System.out.println("Wizard-Contato: " + contato);
-		System.out.println("Wizard-Ponto: " + ponto);
-		System.out.println("Wizard-Categoria: " + categoria);
-		System.out.println("Wizard-StatusLocal: " + statuslocal);
 
 		if (skip) {
 			skip = false; // reset in case user goes back
@@ -168,7 +193,22 @@ public class Controlador {
 		}
 	}
 
-	
+
+	public List<Categoria> getFonte() {
+		return fonte;
+	}
+
+	public void setFonte(List<Categoria> fonte) {
+		this.fonte = fonte;
+	}
+
+	public List<Categoria> getAlvo() {
+		return alvo;
+	}
+
+	public void setAlvo(List<Categoria> alvo) {
+		this.alvo = alvo;
+	}
 
 	public List<Local> getListadelocais() {
 		return listadelocais;
@@ -288,6 +328,14 @@ public class Controlador {
 
 	public void setSelectedLocal(Local selectedLocal) {
 		this.selectedLocal = selectedLocal;
+	}
+
+	public List<Local> getListalocal() {
+		return listalocal;
+	}
+
+	public void setListalocal(List<Local> listalocal) {
+		this.listalocal = listalocal;
 	}
 
 	public void onTransfer(TransferEvent event) {

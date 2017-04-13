@@ -1,6 +1,7 @@
 package br.com.linkstvmorena.model; 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,11 +34,11 @@ import javax.persistence.OneToMany;
  	private String observacao;
  	
   	@ManyToMany( mappedBy="locais", cascade=CascadeType.MERGE)
-  	private Set<Contato> contato = new HashSet<>();
+  	private List<Contato> contato;
   	@ManyToMany(mappedBy="locais", cascade=CascadeType.MERGE)
  	private Set<Categoria> categoria;
   	
-  	@ManyToOne(cascade=CascadeType.MERGE)
+  	@ManyToOne
   	private StatusLocal statuslocal;
  	
  	@OneToMany(mappedBy="local", cascade=CascadeType.MERGE)
@@ -49,6 +50,7 @@ import javax.persistence.OneToMany;
   		categorias.forEach(c -> c.getLocal().add(this));
   	}
  	public void adicionaContatos(List<Contato> contatos){
+ 		contato = new ArrayList<Contato>();
  		this.contato.addAll(contatos);
  		contatos.forEach(c -> c.getLocais().add(this));
  	}
@@ -59,10 +61,10 @@ import javax.persistence.OneToMany;
  	public void setPonto(Set<Ponto> ponto) {
  		this.ponto = ponto;
  	}
- 	public Set<Contato> getContato() {
+ 	public List<Contato> getContato() {
  		return contato;
  	}
- 	public void setContato(Set<Contato> contato) {
+ 	public void setContato(List<Contato> contato) {
  		this.contato = contato;
  	}
  	public Integer getId() {
