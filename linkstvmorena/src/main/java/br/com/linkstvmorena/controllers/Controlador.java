@@ -117,12 +117,21 @@ public class Controlador {
 				this.listadecontato =  ls.getContato();
 				this.statuslocal = ls.getStatuslocal();
 				this.statuslocal = ls.getStatuslocal();
+			/*
+				for (Categoria c : this.fonte) {
+					Iterator<Categoria> it = ls.getCategoria().iterator();
+					if(c.getNome().equals(it.next().getNome())){
+						this.fonte.remove(c);
+						this.alvo.add(it.next());
+					}
+				}*/
 				
-			Iterator<Categoria> catit = ls.getCategoria().iterator();
-			System.out.println("Iterator-catit: "+catit.next());
-			Categoria ct = catit.next();
-			System.out.println("Iterator-ct "+ct);
-			this.fonte.remove(catit.next());
+				/*	
+			//Iterator<Categoria> catit = fonte.iterator();
+			//System.out.println("Iterator-catit: "+catit.next());
+			//Categoria ct = catit.next();
+			//System.out.println("Iterator-ct "+ct);
+			//this.fonte.remove(catit.next().getNome());
 			
 			while(catit.hasNext()){
 				//Categoria ct = catit.next();
@@ -131,7 +140,7 @@ public class Controlador {
 					System.out.println("Iterator: "+ct);
 					this.fonte.remove(ct);
 				}
-			}
+			}*/
 				
 				System.out.println("Editar-Lsita de Categoria-Fonte: "+this.fonte);
 				this.local =ls;
@@ -192,7 +201,6 @@ public class Controlador {
 			return event.getNewStep();
 		}
 	}
-
 
 	public List<Categoria> getFonte() {
 		return fonte;
