@@ -2,7 +2,6 @@ package br.com.linkstvmorena.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -19,8 +18,8 @@ import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.CategoriaService;
 import br.com.linkstvmorena.service.exception.ServiceException;
 
-@Controller
-@ViewScoped
+/*@Controller
+@ViewScoped*/
 public class CategoriaController {
 
 	@Autowired
@@ -48,9 +47,8 @@ public class CategoriaController {
 			MenssagemUtil.mensagemErro("Nao Foi Possivel Carregar a Lista!!" + e.getMessage());
 		}
 	}
-	@SuppressWarnings("unchecked")
 	public void adicionaCategoria() {
-		this.localController.recebeCategoria((Set<Categoria>) this.listcategorias.getTarget());
+		this.localController.recebeCategoria(this.listcategorias.getTarget());
 	}
 	
 	public void adicionaLocal(Local l){

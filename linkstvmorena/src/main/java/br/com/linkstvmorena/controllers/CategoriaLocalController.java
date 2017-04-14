@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.primefaces.model.DualListModel;
 import org.springframework.stereotype.Controller;
-@Controller
+//@Controller
 public class CategoriaLocalController {
 	
 	private DualListModel<String> cities;

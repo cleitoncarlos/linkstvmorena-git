@@ -1,6 +1,5 @@
 package br.com.linkstvmorena.controllers;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,8 +55,6 @@ public class Controlador {
 	List<Categoria> fonte;
 	List<Categoria> alvo;
 
-	
-
 	@PostConstruct
 	public void init() {
 		local = new Local();
@@ -90,7 +87,7 @@ public class Controlador {
 			MenssagemUtil.mensagemErro("Nao Foi Possivel Carregar a Lista!!" + e.getMessage());
 		}
 	}
-	
+
 	public void liberaSelecaoLocal() {
 		selectedLocal = new Local();
 		System.out.println("Entrou!!");
@@ -105,56 +102,67 @@ public class Controlador {
 		} catch (Exception e) {
 			MenssagemUtil.mensagemErro(e.getMessage());
 		}
-		return"";
+		return "";
 	}
 
-	public Local editar (Local l){
+	public Local editar(Local l) {
 		try {
 			listalocal = new ArrayList<Local>();
 			listalocal = servico.buscarPorId(l.getId());
 			for (Local ls : listalocal) {
 				this.listagemdeponto = ls.getPonto();
-				this.listadecontato =  ls.getContato();
+				this.listadecontato = ls.getContato();
 				this.statuslocal = ls.getStatuslocal();
 				this.statuslocal = ls.getStatuslocal();
-			/*
+				
+/*
 				for (Categoria c : this.fonte) {
-					Iterator<Categoria> it = ls.getCategoria().iterator();
+					 					Iterator<Categoria> it = ls.getCategoria().iterator();
+					 					if(c.getNome().equals(it.next().getNome())){
+					 						this.fonte.remove(c);
+					 						this.alvo.add(it.next());
+					 					}*/
+				/*
+				Iterator<Categoria> catit = ls.getCategoria().iterator();
+				System.out.println("Iterator-catit: " + catit.next());
+				Categoria ct = catit.next();
+				System.out.println("Iterator-ct " + ct);
+				this.fonte.remove(catit.next());*/
+				
+				Iterator<Categoria> catit = fonte.iterator();
+				Iterator<Categoria> it = ls.getCategoria().iterator();
+				System.out.println("Fonte: " +fonte+"\nLista de Categoria: "+it.next().getNome());
+				for (int i = 0; i < fonte.size(); i++) {
+					Categoria c = fonte.get(i);
 					if(c.getNome().equals(it.next().getNome())){
-						this.fonte.remove(c);
+						System.out.println("Entrou no If: ");
+					}
+				}
+				
+				/*while (catit.hasNext()) {
+					 Categoria ct = catit.next();
+					System.out.println("Iterator-ct: " + ct);
+					if (ct.getNome().equals(it.next().getNome())) {
+						System.out.println("Iterator: " + ct);
+						this.fonte.remove(ct);
 						this.alvo.add(it.next());
 					}
 				}*/
-				
-				/*	
-			//Iterator<Categoria> catit = fonte.iterator();
-			//System.out.println("Iterator-catit: "+catit.next());
-			//Categoria ct = catit.next();
-			//System.out.println("Iterator-ct "+ct);
-			//this.fonte.remove(catit.next().getNome());
-			
-			while(catit.hasNext()){
-				//Categoria ct = catit.next();
-				System.out.println("Iterator-ct: " +ct);
-				if (ct.equals(ls.getCategoria())){
-					System.out.println("Iterator: "+ct);
-					this.fonte.remove(ct);
-				}
-			}*/
-				
-				System.out.println("Editar-Lsita de Categoria-Fonte: "+this.fonte);
-				this.local =ls;
+
+				System.out.println("Editar-Lsita de Categoria-Fonte: " + this.fonte);
+				this.local = ls;
 			}
-			
-			System.out.println("Editar-Lsita de Ponto: "+this.listagemdeponto);
-			System.out.println("Editar-Lsita de Contato: "+this.listadecontato);
-			System.out.println("Editar-Local: "+this.local);
+
+			System.out.println("Editar-Lsita de Ponto: " + this.listagemdeponto);
+			System.out.println("Editar-Lsita de Contato: " + this.listadecontato);
+			System.out.println("Editar-Local: " + this.local);
 			return this.local;
 		} catch (Exception e) {
 			return null;
 		}
-	
+
 	}
+
 	public void adicionaCategoria() {
 		this.local.adicionaCategorias(this.listcategorias.getTarget());
 	}
@@ -165,13 +173,13 @@ public class Controlador {
 		this.contato = new Contato();
 	}
 
-	public void carregaCategoria(){
+	public void carregaCategoria() {
 		List<Categoria> fonte = servico.buscarCategorias();
-		System.out.println("Lista de Categorias: "+fonte);
+		System.out.println("Lista de Categorias: " + fonte);
 		List<Categoria> alvo = new ArrayList<Categoria>();
 		listcategorias = new DualListModel<Categoria>(fonte, alvo);
 	}
-	
+
 	public void adicionaPonto() {
 		this.listagemdeponto.add(this.ponto);
 		this.local.setPonto(listagemdeponto);
@@ -200,22 +208,6 @@ public class Controlador {
 		} else {
 			return event.getNewStep();
 		}
-	}
-
-	public List<Categoria> getFonte() {
-		return fonte;
-	}
-
-	public void setFonte(List<Categoria> fonte) {
-		this.fonte = fonte;
-	}
-
-	public List<Categoria> getAlvo() {
-		return alvo;
-	}
-
-	public void setAlvo(List<Categoria> alvo) {
-		this.alvo = alvo;
 	}
 
 	public List<Local> getListadelocais() {
@@ -347,10 +339,11 @@ public class Controlador {
 	}
 
 	public void onTransfer(TransferEvent event) {
-		/*StringBuilder builder = new StringBuilder();
-		for (Object item : event.getItems()) {
-			builder.append(((Categoria) item).getNome()).append("<br />");
-		}*/
+		/*
+		 * StringBuilder builder = new StringBuilder(); for (Object item :
+		 * event.getItems()) { builder.append(((Categoria)
+		 * item).getNome()).append("<br />"); }
+		 */
 		FacesMessage msg = new FacesMessage();
 		msg.setSeverity(FacesMessage.SEVERITY_INFO);
 		// msg.setSummary("Items Transferred");

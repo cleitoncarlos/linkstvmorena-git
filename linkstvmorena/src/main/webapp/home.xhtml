@@ -8,7 +8,7 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
-		<h1>Relação dos Locais de Link</h1>
+		<h1>Controle dos Locais de Link</h1>
 		<p:growl />
 		<h:form id="formhome">
 			<p:dataTable id="tabcategoria" paginator="true"
@@ -90,7 +90,7 @@
 
 					<p:carousel value="#{controlador.selectedLocal.ponto}"
 						headerText="Ponto" var="ponto" numVisible="1"
-						itemStyle="height:auto;" 
+						itemStyle="height:auto;" easing="easeOutBounce"
 						style="width:450px">
 
 						<p:panelGrid columns="2" styleClass="ui-noborder"
@@ -111,7 +111,7 @@
 					<br />
 					<p:carousel value="#{controlador.selectedLocal.contato}"
 						headerText="Contato" var="contato" numVisible="1"
-						itemStyle="height:auto;" 
+						itemStyle="height:auto;" easing="easeOutBounce"
 						style="width:450px">
 
 						<p:panelGrid columns="2" styleClass="ui-noborder"

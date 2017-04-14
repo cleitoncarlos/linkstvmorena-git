@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,13 +16,13 @@ public class Ponto implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private Integer id;
 	private String descricao;
 	private String observacao;
-	@ManyToOne(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private Local local;
-	@ManyToOne(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	private StatusPonto statusponto;
 	
 	

@@ -5,10 +5,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.linkstvmorena.dao.exception.DAOException;
 import br.com.linkstvmorena.model.Categoria;
 import br.com.linkstvmorena.model.Local;
 import br.com.linkstvmorena.model.StatusLocal;
@@ -64,7 +64,7 @@ public class Servico {
 				.createQuery("select DISTINCT l from Local l "+
 						" left Join fetch l.ponto "+
 						" left Join fetch l.contato "+
-						" left Join fetch l.categoria "+
+						" Join fetch l.categoria "+
 						"order by l.nome ASC");
 		return consulta.getResultList();
 	}

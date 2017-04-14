@@ -15,8 +15,8 @@ import br.com.linkstvmorena.model.Status_Contato;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.ContatoService;
 
-@Controller
-@ViewScoped
+/*@Controller
+@ViewScoped*/
 public class ContatoController {
 
 	@Autowired

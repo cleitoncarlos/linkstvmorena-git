@@ -19,12 +19,12 @@
 						requiredMessage="Preencha o campo NOME!" />
 
 					<p:commandButton value="Enviar" style=" height:30px"
-						actionListener="#{categoriaController.salvar()}" action="#{controlador.carregaCategoria()}" process="@form"
+						action="#{categoriaController.salvar()}" process="@form"
 						update="@form :cadCategoria">
 
 					</p:commandButton>
 					<p:commandButton value="Cancelar" style=" height:30px"
-						action="#{categoriaController.cancelar()}" process="@this"
+						action="#{categoriaController.cancelar()}" process="@form"
 						update="@form :cadCategoria">
 
 					</p:commandButton>

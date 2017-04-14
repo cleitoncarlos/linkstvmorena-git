@@ -2,7 +2,7 @@ package br.com.linkstvmorena.controllers;
 
 import org.springframework.stereotype.Controller;
 
-@Controller
+/*@Controller*/
 public class ProcessaDadosController {
 
 	private CategoriaController categoriaController;

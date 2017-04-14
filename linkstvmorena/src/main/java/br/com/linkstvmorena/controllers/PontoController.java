@@ -15,8 +15,8 @@ import br.com.linkstvmorena.model.StatusPonto;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.PontoService;
 
-@Controller
-@ViewScoped
+/*@Controller
+@ViewScoped*/
 public class PontoController {
 
 	@Autowired
