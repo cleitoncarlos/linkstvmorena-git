@@ -161,12 +161,13 @@
 										</p:column>
 										<p:column width="70">
 											<f:facet name="header">Ação</f:facet>
-											<p:commandButton actionListener="#" icon="ui-icon-close"
+											<p:commandButton actionListener="#{controlador.excluirPonto(listponto)}" icon="ui-icon-close"
 												style="width:30px; height:20px" process="@this"
 												immediate="true" update="@form" />
-											<p:commandButton actionListener="#" icon="ui-icon-pencil"
-												style="width:30px; height:20px" update="@form"
-												process="@this" />
+											<p:commandButton
+												actionListener="#{controlador.editarPonto(listponto)}"
+												icon="ui-icon-pencil" style="width:30px; height:20px"
+												update="@form" process="@this" />
 
 										</p:column>
 									</p:dataTable>
@@ -242,10 +243,10 @@
 
 										<p:column width="70">
 											<f:facet name="header">Ação</f:facet>
-											<p:commandButton actionListener="#" icon="ui-icon-close"
+											<p:commandButton actionListener="#{controlador.excluirContato(contato)}" icon="ui-icon-close"
 												style="width:30px; height:20px" process="@this"
 												immediate="true" update="@form" />
-											<p:commandButton actionListener="#" icon="ui-icon-pencil"
+											<p:commandButton actionListener="#{controlador.editarContato(contato)}" icon="ui-icon-pencil"
 												style="width:30px; height:20px" update="@form"
 												process="@this" />
 
@@ -389,13 +390,11 @@
 						<f:setPropertyActionListener value="#{l}"
 							target="#{controlador.selectedLocal}" />
 					</p:commandButton>
-					<p:commandButton
-						actionListener="#{controlador.editar(l)}"
+					<p:commandButton actionListener="#{controlador.editar(l)}"
 						title="Editar" icon="ui-icon-pencil"
 						style="width:30px; heigt:30px" update="@form :wiz" process="@this" />
 
-					<p:commandButton
-						actionListener="#{controlador.excluir(l)}"
+					<p:commandButton actionListener="#{controlador.excluir(l)}"
 						title="Excluir" icon="ui-icon-close"
 						style="width:30px; heigt:30px" process="@this" immediate="true"
 						update="@form " />
@@ -497,20 +496,21 @@
 
 
 
-		<p:dialog header="Nova Categoria" widgetVar="dl" resizable="false"
-			draggable="false" responsive="true" modal="false" appendToBody="true">
-			<h:form id="detalheLoal">
-				<p:messages id="messages" autoUpdate="true" closable="true" />
-				<p:panelGrid columns="2">
-					<h:outputText value="Local: " />
-					<h:outputText styleClass="outputLabel" value="#{l.nome}" />
-					<p:commandButton value="Cancelar" style=" height:30px"
-						onclick="PF('dl').hide()" process="@this" update="@form">
+			<p:dialog header="Nova Categoria" widgetVar="dl" resizable="false"
+				draggable="false" responsive="true" modal="false"
+				appendToBody="true">
+				<h:form id="detalheLoal">
+					<p:messages id="messages" autoUpdate="true" closable="true" />
+					<p:panelGrid columns="2">
+						<h:outputText value="Local: " />
+						<h:outputText styleClass="outputLabel" value="#{l.nome}" />
+						<p:commandButton value="Cancelar" style=" height:30px"
+							onclick="PF('dl').hide()" process="@this" update="@form">
 
-					</p:commandButton>
-				</p:panelGrid>
-			</h:form>
-		</p:dialog>
+						</p:commandButton>
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
 		</h:form>
 		<p:dialog header="Nova Categoria" widgetVar="dlg" resizable="false"
 			draggable="false" responsive="true" modal="false" appendToBody="true">

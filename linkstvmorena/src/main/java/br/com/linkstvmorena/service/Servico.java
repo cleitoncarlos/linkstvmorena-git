@@ -23,21 +23,20 @@ public class Servico {
 
 	@Transactional
 	public void salvar(Local local) throws Exception {
-		System.out.println("Entrou em Salvar-Local: "+local);
 		if (local.getId() == null) {
 			Local localBusca = buscaNomeLocal(local.getNome());
-			System.out.println("Entrou em Salvar-LocalBusca: "+localBusca);
 			if (localBusca != null) {
 				throw new ServiceException("Local ja  Cadastrado!", null);
-			} else {
+			} 
+			
+		}else {
 				try {
-					System.out.println("Entrou no Merge-Local: "+local);
 					em.merge(local);
 				} catch (Exception e) {
 					throw new Exception("Erro ao cadastrar!: " + e);
 				}
 			}
-		}
+		
 	}
 
 	@Transactional

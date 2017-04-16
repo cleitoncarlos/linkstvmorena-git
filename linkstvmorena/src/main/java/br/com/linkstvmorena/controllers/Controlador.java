@@ -107,60 +107,51 @@ public class Controlador {
 
 	public Local editar(Local l) {
 		try {
+			init();
 			listalocal = new ArrayList<Local>();
 			listalocal = servico.buscarPorId(l.getId());
 			for (Local ls : listalocal) {
 				this.listagemdeponto = ls.getPonto();
 				this.listadecontato = ls.getContato();
 				this.statuslocal = ls.getStatuslocal();
-				this.statuslocal = ls.getStatuslocal();
-				
-/*
+
 				for (Categoria c : this.fonte) {
-					 					Iterator<Categoria> it = ls.getCategoria().iterator();
-					 					if(c.getNome().equals(it.next().getNome())){
-					 						this.fonte.remove(c);
-					 						this.alvo.add(it.next());
-					 					}*/
-				/*
-				Iterator<Categoria> catit = ls.getCategoria().iterator();
-				System.out.println("Iterator-catit: " + catit.next());
-				Categoria ct = catit.next();
-				System.out.println("Iterator-ct " + ct);
-				this.fonte.remove(catit.next());*/
-				
-				Iterator<Categoria> catit = fonte.iterator();
-				Iterator<Categoria> it = ls.getCategoria().iterator();
-				System.out.println("Fonte: " +fonte+"\nLista de Categoria: "+it.next().getNome());
-				for (int i = 0; i < fonte.size(); i++) {
-					Categoria c = fonte.get(i);
-					if(c.getNome().equals(it.next().getNome())){
-						System.out.println("Entrou no If: ");
+					Iterator<Categoria> it = ls.getCategoria().iterator();
+					String categoria = it.next().getNome();
+					if (c.getNome().equals(categoria)) {
+						this.fonte.remove(c);
+						this.alvo.add(c);
+						break;
 					}
 				}
-				
-				/*while (catit.hasNext()) {
-					 Categoria ct = catit.next();
-					System.out.println("Iterator-ct: " + ct);
-					if (ct.getNome().equals(it.next().getNome())) {
-						System.out.println("Iterator: " + ct);
-						this.fonte.remove(ct);
-						this.alvo.add(it.next());
-					}
-				}*/
 
 				System.out.println("Editar-Lsita de Categoria-Fonte: " + this.fonte);
 				this.local = ls;
 			}
 
-			System.out.println("Editar-Lsita de Ponto: " + this.listagemdeponto);
-			System.out.println("Editar-Lsita de Contato: " + this.listadecontato);
-			System.out.println("Editar-Local: " + this.local);
 			return this.local;
 		} catch (Exception e) {
 			return null;
 		}
 
+	}
+	public Ponto editarPonto(Ponto p){
+		System.out.println("lista ponto!"+p);
+		this.ponto = p;
+		this.statusPonto = p.getStatusponto();
+		return this.ponto;
+	}
+	public Ponto excluirPonto(Ponto c){
+		this.listagemdeponto.remove(c);
+		return this.ponto;
+	}
+	public Contato editarContato(Contato c){
+		this.contato = c;
+		return this.contato;
+	}
+	public Contato excluirContato(Contato c){
+		this.listadecontato.remove(c);
+		return this.contato;
 	}
 
 	public void adicionaCategoria() {
