@@ -23,20 +23,18 @@ public class Servico {
 
 	@Transactional
 	public void salvar(Local local) throws Exception {
-		if (local.getId() == null) {
-			Local localBusca = buscaNomeLocal(local.getNome());
-			if (localBusca != null) {
-				throw new ServiceException("Local ja  Cadastrado!", null);
-			} 
-			
-		}else {
-				try {
-					em.merge(local);
-				} catch (Exception e) {
-					throw new Exception("Erro ao cadastrar!: " + e);
-				}
-			}
 		
+		try {
+			if (local.getId() == null) {
+				Local localBusca = buscaNomeLocal(local.getNome());
+				if (localBusca != null) {
+					throw new ServiceException("Local ja  Cadastrado!", null);
+				} 
+			}
+			em.merge(local);
+		} catch (Exception e) {
+			throw new Exception("Erro ao cadastrar!: " + e);
+		}
 	}
 
 	@Transactional
@@ -63,16 +61,17 @@ public class Servico {
 				.createQuery("select DISTINCT l from Local l "+
 						" left Join fetch l.ponto "+
 						" left Join fetch l.contato "+
-						" Join fetch l.categoria "+
+						" left Join fetch l.categoria "+
 						"order by l.nome ASC");
 		return consulta.getResultList();
 	}
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<Local> buscarPorId(Integer id)  throws ServiceException{
 		String busca ="select DISTINCT l from Local l "+
-						" left Join fetch l.ponto "+
-						" left Join fetch l.contato "+
-						" Join fetch l.categoria "+
+						" left Join fetch l.ponto p "+
+						"  left Join fetch l.contato ct"+
+						" left Join fetch l.categoria c"+
 						" Where l.id=:idParam "+
 						"order by l.nome ASC";
 		

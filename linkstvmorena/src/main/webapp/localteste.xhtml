@@ -124,8 +124,7 @@
 
 										<p:outputLabel for="stponto" value="Status: " />
 										<p:selectOneMenu id="stponto" converter="statusPontoConverter"
-											filter="true" value="#{controlador.statusPonto}"
-											required="true">
+											filter="true" value="#{controlador.statusPonto}">
 											<f:ajax event="change"
 												listener="#{controlador.adicionaStatusPonto()}" />
 											<f:selectItem noSelectionOption="true">selecione um status</f:selectItem>
@@ -161,9 +160,10 @@
 										</p:column>
 										<p:column width="70">
 											<f:facet name="header">Ação</f:facet>
-											<p:commandButton actionListener="#{controlador.excluirPonto(listponto)}" icon="ui-icon-close"
-												style="width:30px; height:20px" process="@this"
-												immediate="true" update="@form" />
+											<p:commandButton
+												actionListener="#{controlador.excluirPonto(listponto)}"
+												icon="ui-icon-close" style="width:30px; height:20px"
+												process="@this" immediate="true" update="@form" />
 											<p:commandButton
 												actionListener="#{controlador.editarPonto(listponto)}"
 												icon="ui-icon-pencil" style="width:30px; height:20px"
@@ -241,15 +241,21 @@
 											<h:outputLabel value="#{contato.celular}"></h:outputLabel>
 										</p:column>
 
-										<p:column width="70">
+										<p:column width="100">
 											<f:facet name="header">Ação</f:facet>
-											<p:commandButton actionListener="#{controlador.excluirContato(contato)}" icon="ui-icon-close"
-												style="width:30px; height:20px" process="@this"
-												immediate="true" update="@form" />
-											<p:commandButton actionListener="#{controlador.editarContato(contato)}" icon="ui-icon-pencil"
-												style="width:30px; height:20px" update="@form"
-												process="@this" />
+											<p:commandButton
+												actionListener="#{controlador.excluirContato(contato)}"
+												icon="ui-icon-close" style="width:30px; height:20px"
+												process="@this" immediate="true" update="@form" />
+											<p:commandButton
+												actionListener="#{controlador.editarContato(contato)}"
+												icon="ui-icon-pencil" style="width:30px; height:20px"
+												update="@form" process="@this" />
 
+											<p:commandButton
+												actionListener="#{controlador.editarContato(contato)}" title="Incluir um Contato Existente"
+												icon="ui-icon-plus" style="width:30px; height:20px"
+												update="@form" process="@this" />
 										</p:column>
 									</p:dataTable>
 								</p:column>

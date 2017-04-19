@@ -20,7 +20,7 @@ public class Ponto implements Serializable {
 	private Integer id;
 	private String descricao;
 	private String observacao;
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne
 	private Local local;
 	@ManyToOne(cascade=CascadeType.MERGE)
 	private StatusPonto statusponto;

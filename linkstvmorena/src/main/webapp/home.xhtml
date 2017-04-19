@@ -35,7 +35,7 @@
 					<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
 				</p:column>
 
-				<p:column>
+				<p:column width="50">
 					<f:facet name="header">Ação</f:facet>
 					<p:commandButton icon="ui-icon-search"
 						style="width:30px; heigt:30px" process="@this"
@@ -44,16 +44,7 @@
 						<f:setPropertyActionListener value="#{l}"
 							target="#{controlador.selectedLocal}" />
 					</p:commandButton>
-					<p:commandButton
-						actionListener="#{controlador.editar(l)}"
-						title="Editar" icon="ui-icon-pencil"
-						style="width:30px; heigt:30px" update="@form" process="@this" />
-
-					<p:commandButton
-						actionListener="#{controlador.excluir(l)}"
-						title="Excluir" icon="ui-icon-close"
-						style="width:30px; heigt:30px" process="@this" immediate="true"
-						update="@form " />
+					
 
 				</p:column>
 			</p:dataTable>
@@ -90,7 +81,7 @@
 
 					<p:carousel value="#{controlador.selectedLocal.ponto}"
 						headerText="Ponto" var="ponto" numVisible="1"
-						itemStyle="height:auto;" easing="easeOutBounce"
+						itemStyle="height:auto;" 
 						style="width:450px">
 
 						<p:panelGrid columns="2" styleClass="ui-noborder"

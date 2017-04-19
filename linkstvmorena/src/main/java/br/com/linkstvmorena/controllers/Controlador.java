@@ -46,14 +46,14 @@ public class Controlador {
 	private List<Local> listadelocais;
 	private List<Status_Contato> listadestatus;
 	private List<Ponto> listaponto;
-	private List<Contato> listadecontato;
+	private Set<Contato> listadecontato;
 	private List<StatusLocal> liststatuslocal;
 	private List<StatusPonto> liststatusponto;
 	private Set<Ponto> listagemdeponto;
 	private DualListModel<Categoria> listcategorias;
 	private List<Local> listalocal;
-	List<Categoria> fonte;
-	List<Categoria> alvo;
+	private List<Categoria> fonte;
+	private List<Categoria> alvo;
 
 	@PostConstruct
 	public void init() {
@@ -64,7 +64,7 @@ public class Controlador {
 		statuslocal = new StatusLocal();
 		statusPonto = new StatusPonto();
 		listadelocais = new ArrayList<Local>();
-		listadecontato = new ArrayList<Contato>();
+		listadecontato = new HashSet<Contato>();
 		liststatusponto = new ArrayList<StatusPonto>();
 		listaponto = new ArrayList<Ponto>();
 		listagemdeponto = new HashSet<>();
@@ -79,7 +79,13 @@ public class Controlador {
 			listadelocais = servico.buscarLocal();
 			liststatuslocal = servico.buscarStatusLocal();
 			liststatusponto = servico.buscarStatusPonto();
+			fonte = new ArrayList<Categoria>();
 			fonte = servico.buscarCategorias();
+			for (Categoria c : fonte) {
+				System.out.println("Categorias-Local"+c);
+				System.out.println("Categorias-Local"+c.getLocal());
+			}
+			
 			alvo = new ArrayList<Categoria>();
 			listcategorias = new DualListModel<Categoria>(fonte, alvo);
 
@@ -111,84 +117,77 @@ public class Controlador {
 			listalocal = new ArrayList<Local>();
 			listalocal = servico.buscarPorId(l.getId());
 			for (Local ls : listalocal) {
+				this.local = ls;
 				this.listagemdeponto = ls.getPonto();
 				this.listadecontato = ls.getContato();
 				this.statuslocal = ls.getStatuslocal();
-
-				for (Categoria c : this.fonte) {
-					Iterator<Categoria> it = ls.getCategoria().iterator();
-					String categoria = it.next().getNome();
-					if (c.getNome().equals(categoria)) {
-						this.fonte.remove(c);
-						this.alvo.add(c);
-						break;
-					}
+				Iterator<Categoria> it = ls.getCategoria().iterator();
+				while (it.hasNext()) {
+					Categoria posicao = it.next();
+					this.fonte.remove(posicao);
+					this.alvo.add(posicao);
 				}
-
-				System.out.println("Editar-Lsita de Categoria-Fonte: " + this.fonte);
-				this.local = ls;
 			}
-
 			return this.local;
 		} catch (Exception e) {
+			System.out.println(e);
 			return null;
 		}
-
 	}
-	public Ponto editarPonto(Ponto p){
-		System.out.println("lista ponto!"+p);
+
+	public Ponto editarPonto(Ponto p) {
+		this.listagemdeponto.remove(p);
 		this.ponto = p;
 		this.statusPonto = p.getStatusponto();
 		return this.ponto;
 	}
-	public Ponto excluirPonto(Ponto c){
+
+	public Ponto excluirPonto(Ponto c) {
 		this.listagemdeponto.remove(c);
 		return this.ponto;
 	}
-	public Contato editarContato(Contato c){
+
+	public Contato editarContato(Contato c) {
 		this.contato = c;
 		return this.contato;
 	}
-	public Contato excluirContato(Contato c){
+
+	public Contato excluirContato(Contato c) {
 		this.listadecontato.remove(c);
 		return this.contato;
 	}
 
 	public void adicionaCategoria() {
-		this.local.adicionaCategorias(this.listcategorias.getTarget());
+		this.local.adicionaCategorias(listcategorias.getTarget());
 	}
 
 	public void adicionaContato() {
-		this.listadecontato.add(this.contato);
-		this.local.adicionaContatos(listadecontato);
-		this.contato = new Contato();
+		listadecontato.add(contato);
+		local.adicionaContatos(listadecontato);
+		contato = new Contato();
 	}
 
 	public void carregaCategoria() {
 		List<Categoria> fonte = servico.buscarCategorias();
-		System.out.println("Lista de Categorias: " + fonte);
 		List<Categoria> alvo = new ArrayList<Categoria>();
 		listcategorias = new DualListModel<Categoria>(fonte, alvo);
 	}
 
 	public void adicionaPonto() {
-		this.listagemdeponto.add(this.ponto);
-		this.local.setPonto(listagemdeponto);
-		this.ponto.setLocal(local);
-		System.out.println("Local: " + local + " Ponto: " + ponto);
+		listagemdeponto.add(ponto);
+		local.adicionaPonto(listagemdeponto);
+		/*this.local.setPonto(listagemdeponto);
+		this.ponto.setLocal(local);*/
 		this.ponto = new Ponto();
+		this.statusPonto = new StatusPonto();
 	}
 
 	public void adicionaStatusPonto() {
 		this.ponto.setStatusponto(statusPonto);
-		System.out.println("\nLocal: " + this.local);
-		System.out.println("Local- StatusLocal: " + this.statuslocal);
 	}
 
 	public void adicionaStatusLocal() {
 		this.local.setStatuslocal(this.statuslocal);
-		System.out.println("\nLocal: " + this.local);
-		System.out.println("Local- StatusLocal: " + this.statuslocal);
 	}
 
 	public String onFlowProcess(FlowEvent event) {
@@ -209,11 +208,11 @@ public class Controlador {
 		this.listadelocais = listadelocais;
 	}
 
-	public List<Contato> getListadecontato() {
+	public Set<Contato> getListadecontato() {
 		return listadecontato;
 	}
 
-	public void setListadecontato(List<Contato> listadecontato) {
+	public void setListadecontato(Set<Contato> listadecontato) {
 		this.listadecontato = listadecontato;
 	}
 
