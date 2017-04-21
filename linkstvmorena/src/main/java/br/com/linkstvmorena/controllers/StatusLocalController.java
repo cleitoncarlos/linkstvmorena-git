@@ -15,8 +15,8 @@ import br.com.linkstvmorena.model.StatusLocal;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.StatusLocalService;
 
-/*@ViewScoped
-@Controller*/
+@ViewScoped
+@Controller
 public class StatusLocalController implements Serializable {
 	/**
 	 * 
@@ -24,7 +24,7 @@ public class StatusLocalController implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private StatusLocalService statuslocalService;
-	@Autowired
+	//@Autowired
 	private LocalController localcontroller;
 	private StatusLocal statuslocal;
 	private Integer statusid;

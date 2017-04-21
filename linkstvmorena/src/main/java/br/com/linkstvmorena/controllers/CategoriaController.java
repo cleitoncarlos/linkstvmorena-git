@@ -18,13 +18,13 @@ import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.CategoriaService;
 import br.com.linkstvmorena.service.exception.ServiceException;
 
-/*@Controller
-@ViewScoped*/
+@Controller
+@ViewScoped
 public class CategoriaController {
 
 	@Autowired
 	private CategoriaService categoriaService;
-	@Autowired
+	//@Autowired
 	private LocalController localController;
 	private Categoria categoria;
 	private Local local;

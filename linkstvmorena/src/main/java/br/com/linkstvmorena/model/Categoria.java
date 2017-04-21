@@ -21,8 +21,6 @@ public class Categoria implements Serializable{
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	private String nome;
-	@ManyToMany(cascade=CascadeType.MERGE)
-	private Set<Local> locais = new HashSet<>();
 	
 	public Integer getId() {
 		return id;
@@ -37,12 +35,6 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 	
-	public Set<Local> getLocal() {
-		return locais;
-	}
-	public void setLocal(Set<Local> local) {
-		this.locais = local;
-	}
 	@Override
 	public String toString() {
 		return "Categoria [id=" + id + ", nome=" + nome + "]";

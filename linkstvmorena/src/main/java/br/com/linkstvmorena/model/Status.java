@@ -1,5 +1,5 @@
 package br.com.linkstvmorena.model;
 
-public enum Status_Contato {
+public enum Status {
 	ATIVO,INATIVO;
 }

@@ -25,7 +25,7 @@ import br.com.linkstvmorena.model.Local;
 import br.com.linkstvmorena.model.Ponto;
 import br.com.linkstvmorena.model.StatusLocal;
 import br.com.linkstvmorena.model.StatusPonto;
-import br.com.linkstvmorena.model.Status_Contato;
+import br.com.linkstvmorena.model.Status;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.Servico;
 
@@ -44,7 +44,7 @@ public class Controlador {
 	private StatusLocal statuslocal;
 	private StatusPonto statusPonto;
 	private List<Local> listadelocais;
-	private List<Status_Contato> listadestatus;
+	private List<Status> listadestatus;
 	private List<Ponto> listaponto;
 	private Set<Contato> listadecontato;
 	private List<StatusLocal> liststatuslocal;
@@ -54,9 +54,15 @@ public class Controlador {
 	private List<Local> listalocal;
 	private List<Categoria> fonte;
 	private List<Categoria> alvo;
+	private String busca;
+	private boolean painel;
+	private List<Local> listSearch;
 
 	@PostConstruct
 	public void init() {
+		
+		painel = false;
+		listSearch = new ArrayList<Local>();
 		local = new Local();
 		contato = new Contato();
 		ponto = new Ponto();
@@ -70,23 +76,19 @@ public class Controlador {
 		listagemdeponto = new HashSet<>();
 		liststatuslocal = new ArrayList<>();
 
-		listadestatus = new ArrayList<Status_Contato>();
-		for (Status_Contato lc : Status_Contato.values()) {
+		listadestatus = new ArrayList<Status>();
+		for (Status lc : Status.values()) {
 			listadestatus.add(lc);
 		}
 
 		try {
-			listadelocais = servico.buscarLocal();
+			listadelocais = servico.buscarLocal(Status.ATIVO);
 			liststatuslocal = servico.buscarStatusLocal();
 			liststatusponto = servico.buscarStatusPonto();
 			fonte = new ArrayList<Categoria>();
 			fonte = servico.buscarCategorias();
-			for (Categoria c : fonte) {
-				System.out.println("Categorias-Local"+c);
-				System.out.println("Categorias-Local"+c.getLocal());
-			}
-			
 			alvo = new ArrayList<Categoria>();
+			System.out.println("Fonte: " + fonte);
 			listcategorias = new DualListModel<Categoria>(fonte, alvo);
 
 		} catch (Exception e) {
@@ -99,12 +101,32 @@ public class Controlador {
 		System.out.println("Entrou!!");
 	}
 
+	public List<Local> search() {
+		listSearch = new ArrayList<Local>();
+		
+		try {
+			if (busca != "") {
+				painel=true;
+				listSearch = servico.buscaLocalTela(busca);
+			}else
+				return null;
+
+			System.out.println("StringBusca: " + busca);
+			System.out.println("Busca Local: " + listSearch);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
 	public String salvar() {
 		try {
 			servico.salvar(local);
 			init();
 			MenssagemUtil.mensagemInfo("Salvo com Sucesso!!");
-			return "home";
+			return "localteste";
 		} catch (Exception e) {
 			MenssagemUtil.mensagemErro(e.getMessage());
 		}
@@ -132,6 +154,18 @@ public class Controlador {
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
+		}
+	}
+
+	public void remover(Local l) {
+		try {
+			l.setStatus(Status.INATIVO);
+			servico.salvar(l);
+			// servico.remover(l);
+			init();
+			MenssagemUtil.mensagemInfo("Excluido com Sucesso!!");
+		} catch (Exception e) {
+			MenssagemUtil.mensagemErro(e.getMessage());
 		}
 	}
 
@@ -176,8 +210,9 @@ public class Controlador {
 	public void adicionaPonto() {
 		listagemdeponto.add(ponto);
 		local.adicionaPonto(listagemdeponto);
-		/*this.local.setPonto(listagemdeponto);
-		this.ponto.setLocal(local);*/
+		/*
+		 * this.local.setPonto(listagemdeponto); this.ponto.setLocal(local);
+		 */
 		this.ponto = new Ponto();
 		this.statusPonto = new StatusPonto();
 	}
@@ -200,6 +235,22 @@ public class Controlador {
 		}
 	}
 
+	public List<Local> getListSearch() {
+		return listSearch;
+	}
+
+	public void setListSearch(List<Local> listSearch) {
+		this.listSearch = listSearch;
+	}
+
+	public String getBusca() {
+		return busca;
+	}
+
+	public void setBusca(String busca) {
+		this.busca = busca;
+	}
+
 	public List<Local> getListadelocais() {
 		return listadelocais;
 	}
@@ -216,11 +267,11 @@ public class Controlador {
 		this.listadecontato = listadecontato;
 	}
 
-	public List<Status_Contato> getListadestatus() {
+	public List<Status> getListadestatus() {
 		return listadestatus;
 	}
 
-	public void setListadestatus(List<Status_Contato> listadestatus) {
+	public void setListadestatus(List<Status> listadestatus) {
 		this.listadestatus = listadestatus;
 	}
 
@@ -363,6 +414,16 @@ public class Controlador {
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
 	}
+
+	
+	public boolean isPainel() {
+		return painel;
+	}
+
+	public void setPainel(boolean painel) {
+		this.painel = painel;
+	}
+
 
 	private boolean skip;
 	private int step;

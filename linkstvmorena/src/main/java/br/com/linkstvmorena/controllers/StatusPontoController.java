@@ -15,8 +15,8 @@ import br.com.linkstvmorena.model.StatusPonto;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.StatusPontoService;
 
-/*@Controller
-@ViewScoped*/
+@Controller
+@ViewScoped
 public class StatusPontoController implements Serializable{
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class StatusPontoController implements Serializable{
 	private StatusPonto statusPonto;
 	private Ponto ponto;
 	private List<StatusPonto> liststatus;
-	@Autowired
+	//@Autowired
 	private PontoController pontoController;
 	
 	

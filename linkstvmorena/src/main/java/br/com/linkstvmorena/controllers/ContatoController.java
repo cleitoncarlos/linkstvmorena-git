@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import br.com.linkstvmorena.model.Contato;
 import br.com.linkstvmorena.model.Local;
-import br.com.linkstvmorena.model.Status_Contato;
+import br.com.linkstvmorena.model.Status;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.ContatoService;
 
@@ -25,7 +25,7 @@ public class ContatoController {
 	private ContatoService contatoService;
 	private Local local;
 	private Contato contato;
-	private List<Status_Contato> listadestatus;
+	private List<Status> listadestatus;
 	private List<Contato> listadecontato;
 
 	@PostConstruct
@@ -33,8 +33,8 @@ public class ContatoController {
 		this.local = new Local();
 		this.contato = new Contato();
 		listadecontato = new ArrayList<Contato>();
-		listadestatus = new ArrayList<Status_Contato>();
-		for (Status_Contato lc : Status_Contato.values()) {
+		listadestatus = new ArrayList<Status>();
+		for (Status lc : Status.values()) {
 			listadestatus.add(lc);
 		}
 
@@ -63,11 +63,11 @@ public class ContatoController {
 		}
 	}
 
-	public List<Status_Contato> getListadestatus() {
+	public List<Status> getListadestatus() {
 		return listadestatus;
 	}
 
-	public void setListadestatus(List<Status_Contato> listadestatus) {
+	public void setListadestatus(List<Status> listadestatus) {
 		this.listadestatus = listadestatus;
 	}
 

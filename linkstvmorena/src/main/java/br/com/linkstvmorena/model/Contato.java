@@ -30,27 +30,15 @@ public class Contato implements Serializable{
 	private String celular;
 	private String telefone;
 	
-	@ManyToMany(cascade=CascadeType.MERGE)
-	private Set<Local> locais = new HashSet<>();;
-	
 	@Enumerated(EnumType.STRING)
 	@Column(name="status")
-	private Status_Contato status;
+	private Status status;
 
-
-	public Set<Local> getLocais() {
-		return locais;
-	}
-
-	public void setLocais(Set<Local> locais) {
-		this.locais = locais;
-	}
-
-	public Status_Contato getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status_Contato status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.linkstvmorena.dao.exception.DAOException;
 import br.com.linkstvmorena.model.Categoria;
 import br.com.linkstvmorena.model.Local;
+import br.com.linkstvmorena.model.Status;
 import br.com.linkstvmorena.model.StatusLocal;
 import br.com.linkstvmorena.model.StatusPonto;
 import br.com.linkstvmorena.service.exception.ServiceException;
@@ -55,14 +56,39 @@ public class Servico {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<Local> buscarLocal() {
+	public List<Local> buscaLocalTela(String search) {
+		String busca ="select DISTINCT l from Local l "+
+				" where lower(l.nome) like lower(:nomeParam) "+
+				"order by l.nome ASC";
 		
-		Query consulta = em
-				.createQuery("select DISTINCT l from Local l "+
-						" left Join fetch l.ponto "+
-						" left Join fetch l.contato "+
-						" left Join fetch l.categoria "+
-						"order by l.nome ASC");
+		Query consulta = em.createQuery(busca);
+		consulta.setParameter("nomeParam", search+"%");
+		return consulta.getResultList();
+	}
+	
+	@Transactional
+	public void remover(Local local) throws DAOException {
+		try {
+			em.remove(buscaParaExcluir(local.getId()));
+		} catch (Exception e) {
+			throw new DAOException("Nao Foi Possivel Excluir!" , e.getCause());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Local> buscarLocal(Status t) {
+		System.out.println("Status: "+t);
+		//t = Status.INATIVO;
+		String busca ="select DISTINCT l from Local l "+
+				" left Join fetch l.ponto "+
+				" left Join fetch l.contato "+
+				" left Join fetch l.categoria "+
+				" where l.status=:statusP "+
+				"order by l.nome ASC";
+		
+		Query consulta = em.createQuery(busca);
+		consulta.setParameter("statusP", t);
 		return consulta.getResultList();
 	}
 	@SuppressWarnings("unchecked")
@@ -80,6 +106,19 @@ public class Servico {
 		return consulta.getResultList();
 	}
 	
+	public Local buscaParaExcluir(Integer id) throws ServiceException{
+		String busca ="select DISTINCT l from Local l "+
+				" left Join fetch l.ponto p "+
+				"  left Join fetch l.contato ct"+
+				" left Join fetch l.categoria c"+
+				" Where l.id=:idParam "+
+				"order by l.nome ASC";
+
+			Query consulta = em.createQuery(busca);
+			consulta.setParameter("idParam", id);
+			return (Local) consulta.getSingleResult();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<StatusPonto> buscarStatusPonto() {
 		Query consulta = em.createQuery("select s from StatusPonto s order by nome ASC");
@@ -89,7 +128,7 @@ public class Servico {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<Categoria> buscarCategorias() {
-		Query consulta = em.createQuery("select c from Categoria c left Join fetch c.locais order by c.nome ASC");
+		Query consulta = em.createQuery("select c from Categoria c order by c.nome ASC");
 		return consulta.getResultList();
 	}
 

@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import br.com.linkstvmorena.service.Servico;
 
 @Entity
 public class Local implements Serializable {
@@ -25,7 +25,6 @@ public class Local implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
@@ -37,40 +36,43 @@ public class Local implements Serializable {
 	private String complemento;
 	private String observacao;
 
-	@ManyToMany(mappedBy = "locais", cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
 	private Set<Contato> contato = new HashSet<>();
-	@ManyToMany(mappedBy = "locais", cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
 	private Set<Categoria> categoria = new HashSet<>();
 
 	@ManyToOne
 	private StatusLocal statuslocal;
 
-	@OneToMany(mappedBy = "local", cascade = CascadeType.MERGE)
+	@OneToMany(cascade = CascadeType.MERGE,fetch=FetchType.EAGER)
 	private Set<Ponto> ponto;
-
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="status")
+	private Status status = Status.ATIVO;
+	
 	public void adicionaCategorias(List<Categoria> categorias) {
 		this.categoria.addAll(categorias);
-		for (Categoria c : categorias) {
-			c.getLocal().add(this);
-		}
 		//categorias.forEach(c -> c.getLocal().add(this));
 	}
 
 	public void adicionaContatos(Set<Contato> contatos) {
-		System.out.println("AdicionaContatos: "+contatos);
 		this.contato.addAll(contatos);
-		System.out.println("AdicionaContatos-Lista: "+this.contato);
-		for (Contato c : contatos) {
-			System.out.println("AdicionaContatos-Locais: "+c.getLocais());
-			c.getLocais().add(this);
-		}
 		//contatos.forEach(c -> c.getLocais().add(this));
 	}
 
 	public void adicionaPonto(Set<Ponto> pontos) {
 		this.ponto = new HashSet<>();
 		this.ponto.addAll(pontos);
-		pontos.forEach(p -> p.setLocal(this));
+		//pontos.forEach(p -> p.setLocal(this));
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	public Set<Ponto> getPonto() {

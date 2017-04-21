@@ -10,7 +10,7 @@
 	<ui:define name="conteudo">
 		<h2>Manutenção de Link - Teste</h2>
 		<h:form id="wiz">
-			<p:messages id="growl" sticky="true" />
+			<!-- <p:messages id="growl" sticky="true" /> -->
 			<p:wizard flowListener="#{controlador.onFlowProcess}"
 				widgetVar="wizard" styleClass=".ui-wizard-nav-back">
 				<!-- Cadastro de Endereço -->
@@ -400,7 +400,7 @@
 						title="Editar" icon="ui-icon-pencil"
 						style="width:30px; heigt:30px" update="@form :wiz" process="@this" />
 
-					<p:commandButton actionListener="#{controlador.excluir(l)}"
+					<p:commandButton actionListener="#{controlador.remover(l)}"
 						title="Excluir" icon="ui-icon-close"
 						style="width:30px; heigt:30px" process="@this" immediate="true"
 						update="@form " />

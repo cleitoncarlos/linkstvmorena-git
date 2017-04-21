@@ -9,49 +9,77 @@
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
 		<h1>Controle dos Locais de Link</h1>
-		<p:growl />
+
 		<h:form id="formhome">
-			<p:dataTable id="tabcategoria" paginator="true"
-				paginatorPosition="bottom" rows="5"
-				value="#{controlador.listadelocais}" var="l"
-				emptyMessage="Nenhum registro." border="1">
-				<f:facet name="header">
-        				Lista de Locais
+			<p:growl auautoUpdate="true" />
+
+			<div align="center">
+				<p:inputText style="width:700px; margin-left:"
+					value="#{controlador.busca}"
+					placeholder="Digite um Local. ex: Forum Eleitoral">
+					<p:ajax event="keyup" listener="#{controlador.search()}"
+						update="tabcategoria" delay="0" />
+				</p:inputText>
+
+			</div>
+			<br />
+			<p:panel style="border:none">
+				<p:dataTable id="tabcategoria" paginator="true"
+					paginatorPosition="bottom" rows="5"
+					value="#{controlador.listSearch}" var="l"
+					emptyMessage="Nenhum registro." border="1">
+					<f:facet name="header">
+        				Resultado da Busca
      				</f:facet>
-				<p:column>
-					<f:facet name="header">Local</f:facet>
-					<h:outputLabel value="#{l.nome}"></h:outputLabel>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Endereço</f:facet>
-					<h:outputLabel value="#{l.logradouro}"></h:outputLabel>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Numero</f:facet>
-					<h:outputLabel value="#{l.numero}"></h:outputLabel>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Status</f:facet>
-					<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
-				</p:column>
+					<p:column>
+						<f:facet name="header">Local</f:facet>
+						<h:outputLabel value="#{l.nome}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Endereço</f:facet>
+						<h:outputLabel value="#{l.logradouro}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Numero</f:facet>
+						<h:outputLabel value="#{l.numero}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Status</f:facet>
+						<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
+					</p:column>
 
-				<p:column width="50">
-					<f:facet name="header">Ação</f:facet>
-					<p:commandButton icon="ui-icon-search"
-						style="width:30px; heigt:30px" process="@this"
-						title="Ver Detalhes" update=":formhome:localDetail:"
-						onclick="PF('localDialog').show()">
-						<f:setPropertyActionListener value="#{l}"
-							target="#{controlador.selectedLocal}" />
-					</p:commandButton>
-					
+					<p:column>
+						<f:facet name="header">Ação</f:facet>
+						<p:commandButton icon="ui-icon-search"
+							style="width:30px; heigt:30px" process="@this"
+							title="Ver Detalhes" update=":formhome:localDetail:"
+							onclick="PF('localDialog').show()">
+							<f:setPropertyActionListener value="#{l}"
+								target="#{controlador.selectedLocal}" />
+						</p:commandButton>
+						<p:commandButton actionListener="#{controlador.editar(l)}"
+							title="Editar" icon="ui-icon-pencil"
+							style="width:30px; heigt:30px" update="@form" process="@this" />
 
-				</p:column>
-			</p:dataTable>
+						<p:commandButton actionListener="#{controlador.remover(l)}"
+							title="Excluir" icon="ui-icon-close"
+							style="width:30px; heigt:30px" process="@this" immediate="true"
+							update="@form " />
+
+
+					</p:column>
+				</p:dataTable>
+			</p:panel>
 
 			<p:dialog header="#{controlador.selectedLocal.nome}"
-				widgetVar="localDialog" modal="false" showEffect="fade"
-				hideEffect="fade" resizable="false">
+				position="center" widgetVar="localDialog" modal="false"
+				showEffect="fade" hideEffect="fade" resizable="false">
+				<div align="right" >
+					<p:commandButton actionListener="#{controlador.liberaSelecaoLocal()}"
+						title="Excluir" icon="ui-icon-close"
+						style="width:30px; heigt:30px" process="@this" immediate="true"
+						update="@form " />
+				</div>
 				<p:outputPanel id="localDetail" style="text-align:none;"
 					styleClass="ui-noborder">
 
@@ -81,7 +109,7 @@
 
 					<p:carousel value="#{controlador.selectedLocal.ponto}"
 						headerText="Ponto" var="ponto" numVisible="1"
-						itemStyle="height:auto;" 
+						itemStyle="height:auto;" easing="easeOutBounce"
 						style="width:450px">
 
 						<p:panelGrid columns="2" styleClass="ui-noborder"
