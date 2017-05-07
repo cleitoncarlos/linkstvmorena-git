@@ -96,8 +96,9 @@ public class Controlador {
 		}
 	}
 
-	public void liberaSelecaoLocal() {
+	public void selecaoLocal(Local l) {
 		selectedLocal = new Local();
+		selectedLocal = l;
 		System.out.println("Entrou!!");
 	}
 
@@ -227,6 +228,15 @@ public class Controlador {
 
 	public String onFlowProcess(FlowEvent event) {
 
+		/*if(this.statuslocal.getNome().equals("Não Fecha Link")){
+			skip = false; // reset in case user goes back
+			init();
+			return "confirm";
+		}
+		 else {
+				return event.getNewStep();
+			}*/
+		
 		if (skip) {
 			skip = false; // reset in case user goes back
 			return "confirm";
