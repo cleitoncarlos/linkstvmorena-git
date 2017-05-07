@@ -62,7 +62,7 @@ public class Servico {
 				"order by l.nome ASC";
 		
 		Query consulta = em.createQuery(busca);
-		consulta.setParameter("nomeParam", search+"%");
+		consulta.setParameter("nomeParam", "%"+search+"%");
 		return consulta.getResultList();
 	}
 	
