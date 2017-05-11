@@ -8,7 +8,7 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
-		<h1 align="center" style="padding-top: 40px">Pesquisar Locais de
+		<h1 align="center" style="padding-top: 40px;">Pesquisar Locais de
 			Link</h1>
 		<br />
 		<h:form id="formhome">
@@ -24,122 +24,10 @@
 
 			</div>
 			<br />
-			<!-- <p align="left">
-				<strong>Resultado da Busca</strong>
-			</p> -->
-	<!-- 		<p:panel style="border:none">
-				<p:dataTable id="tabcategoria" paginator="false"
-					paginatorPosition="bottom" rows="10"
-					value="#{controlador.listSearch}" var="l"
-					emptyMessage="Sua Pesquisa não Retornou nenhum Resultado">
-					<f:facet name="header">
-        				Resultado da Busca
-     				</f:facet>
-					<p:column style="width:16px">
-						<p:rowToggler />
-					</p:column>
-					<p:column>
-						<f:facet name="header">Local</f:facet>
-						<h:outputLabel value="#{l.nome}"></h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">Endereço</f:facet>
-						<h:outputLabel value="#{l.logradouro}"></h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">Numero</f:facet>
-						<h:outputLabel value="#{l.numero}"></h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">Status</f:facet>
-						<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
-					</p:column>
-
-					<p:column style="">
-						<f:facet name="header">Ação</f:facet>
-						<p:commandButton icon="ui-icon-search" id="b"
-							style="width:30px; heigt:30px" process="@form"
-							title="Ver Detalhes" update=":formhome:localDetail:"
-							onclick="PF('localDialog').show()">
-							<f:setPropertyActionListener value="#{l}" for="b"
-								target="#{controlador.selectedLocal}" />
-						</p:commandButton>
-					<p:commandButton actionListener="#{controlador.editar(l)}"
-							title="Editar" icon="ui-icon-pencil"
-							style="width:30px; heigt:30px" update="@form" process="@this" />
-
-						<p:commandButton actionListener="#{controlador.remover(l)}"
-							title="Excluir" icon="ui-icon-close"
-							style="width:30px; heigt:30px" process="@this" immediate="true"
-							update="@form " /> 
-					</p:column>
-					<p:rowExpansion>
-						<p:panelGrid columns="2" styleClass="ui-noborder"
-							columnClasses="label,value">
-
-							<h:outputText value="Local:" />
-							<h:outputText value="#{l.nome}" />
-
-							<h:outputText value="Endereço:" />
-							<h:outputText
-								value="#{l.logradouro} , Nº #{l.numero} - #{l.bairro}" />
-
-							<h:outputText value="Complemento:" />
-							<h:outputText value="#{l.complemento}" />
-
-							<h:outputText value="Observação:" />
-							<h:outputText value="#{l.observacao}" />
-
-						</p:panelGrid>
-						<p>
-							<strong>#{l.nome}</strong>, fecha link destes Pontos abaixo:
-						</p>
-						<p:dataTable var="ponto" value="#{l.ponto}"
-							emptyMessage="Sem dados dos Pontos!">
-
-							<p:column headerText="Descrição:">
-								<h:outputText value="#{ponto.descricao}" />
-							</p:column>
-
-							<p:column headerText="Observação">
-								<h:outputText value="#{ponto.observacao}" />
-							</p:column>
-
-							<p:column headerText="Status">
-								<h:outputText value="#{ponto.statusponto.nome}" />
-							</p:column>
-
-						</p:dataTable>
-
-						<p>
-							<strong>Contato(s)</strong>
-						</p>
-						<p:dataTable var="contato" value="#{l.contato}"
-							emptyMessage="Sem dados dos Contatos">
-
-							<p:column headerText="Nome:">
-								<h:outputText value="#{contato.nome}" />
-							</p:column>
-							<p:column headerText="Celular:">
-								<h:outputText value="#{contato.celular}" />
-							</p:column>
-							<p:column headerText="Celular:">
-								<h:outputText value="#{contato.telefone}" />
-							</p:column>
-							<p:column headerText="Email:">
-								<h:outputText value="#{contato.email}" />
-							</p:column>
-
-						</p:dataTable>
-
-					</p:rowExpansion>
-				</p:dataTable>
-
-			</p:panel> -->
 
 			<p:accordionPanel value="#{controlador.listSearch}" var="l"
 				id="tabteste">
-				
+
 				<p:tab title="#{l.nome}">
 					<p align="center">
 						<strong>Descrição do Local</strong>
@@ -165,12 +53,12 @@
 							<h:outputText value="#{ponto.descricao}" />
 						</p:column>
 
-						<p:column headerText="Observação">
-							<h:outputText value="#{ponto.observacao}" />
-						</p:column>
-
 						<p:column headerText="Status">
 							<h:outputText value="#{ponto.statusponto.nome}" />
+						</p:column>
+						
+						<p:column headerText="Observação">
+							<h:outputText value="#{ponto.observacao}" />
 						</p:column>
 
 					</p:dataTable>
