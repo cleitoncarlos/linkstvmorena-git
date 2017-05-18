@@ -5,49 +5,54 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class StatusLocal implements Serializable{
+public class StatusLocal implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 	private String nome;
-	@OneToMany(mappedBy="statuslocal", cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "statuslocal", cascade = CascadeType.MERGE)
 	private List<Local> local;
-	
-	
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public List<Local> getLocal() {
 		return local;
 	}
+
 	public void setLocal(List<Local> local) {
 		this.local = local;
 	}
+
 	@Override
 	public String toString() {
 		return "StatusLocal [id=" + id + ", nome=" + nome + "]";
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -56,6 +61,7 @@ public class StatusLocal implements Serializable{
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -77,5 +83,5 @@ public class StatusLocal implements Serializable{
 			return false;
 		return true;
 	}
-	
+
 }

@@ -28,7 +28,7 @@ public class StatusPontoController implements Serializable{
 	private StatusPonto statusPonto;
 	private Ponto ponto;
 	private List<StatusPonto> liststatus;
-	@Autowired
+	//@Autowired
 	private PontoController pontoController;
 	
 	

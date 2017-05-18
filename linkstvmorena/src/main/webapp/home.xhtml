@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -8,62 +8,304 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
-		<h1>Controle dos Locais de Link</h1>
-<!-- 
-		<p:commandButton value="Show" type="button" onclick="PF('dlg').show()" />
-		<p:commandButton value="Hide" type="button" onclick="PF('dlg').hide()" />
+		<h1 align="center" style="padding-top: 40px">Pesquisar Local de
+			Link</h1>
+		<br />
+		<h:form id="formhome">
+			<p:growl auautoUpdate="true" />
 
-		<p:panelGrid>
-			<p:row>
-				<p:column rowspan="2">
-					<h:panelGrid columns="2" columnClasses="label, value" layout="grid"
-						styleClass="ui-noborder">
-						<p:outputLabel value="Logradouro: " for="logradouro" />
-						<p:inputText id="logradouro" required="true" />
-						<p:message for="logradouro" display="tooltip" />
-						<p:tooltip for="logradouro" value="Selecione uma categoria" />
-						<p:outputLabel value="CEP: " for="cep" />
-						<p:inputMask mask="99.999-999" id="cep" />
+			<div align="center">
+				<p:inputText style="width:700px; margin-left:" 
+					value="#{controlador.busca}"
+					placeholder="Digite um Local. ex: Forum Eleitoral">
+					<p:ajax event="keyup" listener="#{controlador.search()}"
+						update="tabteste" delay="0" />
+				</p:inputText>
 
-						<p:outputLabel value="Número: " for="numero" />
-						<p:inputText id="numero" />
+			</div>
+			<br />
+			<!-- <p align="left">
+				<strong>Resultado da Busca</strong>
+			</p> -->
+	<!-- 		<p:panel style="border:none">
+				<p:dataTable id="tabcategoria" paginator="false"
+					paginatorPosition="bottom" rows="10"
+					value="#{controlador.listSearch}" var="l"
+					emptyMessage="Sua Pesquisa não Retornou nenhum Resultado">
+					<f:facet name="header">
+        				Resultado da Busca
+     				</f:facet>
+					<p:column style="width:16px">
+						<p:rowToggler />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Local</f:facet>
+						<h:outputLabel value="#{l.nome}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Endereço</f:facet>
+						<h:outputLabel value="#{l.logradouro}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Numero</f:facet>
+						<h:outputLabel value="#{l.numero}"></h:outputLabel>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Status</f:facet>
+						<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
+					</p:column>
 
-						<p:outputLabel value="Bairro: " for="bairro" />
-						<p:inputText id="bairro" />
+					<p:column style="">
+						<f:facet name="header">Ação</f:facet>
+						<p:commandButton icon="ui-icon-search" id="b"
+							style="width:30px; heigt:30px" process="@form"
+							title="Ver Detalhes" update=":formhome:localDetail:"
+							onclick="PF('localDialog').show()">
+							<f:setPropertyActionListener value="#{l}" for="b"
+								target="#{controlador.selectedLocal}" />
+						</p:commandButton>
+					<p:commandButton actionListener="#{controlador.editar(l)}"
+							title="Editar" icon="ui-icon-pencil"
+							style="width:30px; heigt:30px" update="@form" process="@this" />
 
-						<p:outputLabel value="Complemento: " for="complemento" />
-						<p:inputText id="complemento" />
+						<p:commandButton actionListener="#{controlador.remover(l)}"
+							title="Excluir" icon="ui-icon-close"
+							style="width:30px; heigt:30px" process="@this" immediate="true"
+							update="@form " /> 
+					</p:column>
+					<p:rowExpansion>
+						<p:panelGrid columns="2" styleClass="ui-noborder"
+							columnClasses="label,value">
 
-						<p:outputLabel value="Observação: " for="descricao" />
-						<p:inputTextarea id="descricao" cols="40" />
+							<h:outputText value="Local:" />
+							<h:outputText value="#{l.nome}" />
+
+							<h:outputText value="Endereço:" />
+							<h:outputText
+								value="#{l.logradouro} , Nº #{l.numero} - #{l.bairro}" />
+
+							<h:outputText value="Complemento:" />
+							<h:outputText value="#{l.complemento}" />
+
+							<h:outputText value="Observação:" />
+							<h:outputText value="#{l.observacao}" />
+
+						</p:panelGrid>
+						<p>
+							<strong>#{l.nome}</strong>, fecha link destes Pontos abaixo:
+						</p>
+						<p:dataTable var="ponto" value="#{l.ponto}"
+							emptyMessage="Sem dados dos Pontos!">
+
+							<p:column headerText="Descrição:">
+								<h:outputText value="#{ponto.descricao}" />
+							</p:column>
+
+							<p:column headerText="Observação">
+								<h:outputText value="#{ponto.observacao}" />
+							</p:column>
+
+							<p:column headerText="Status">
+								<h:outputText value="#{ponto.statusponto.nome}" />
+							</p:column>
+
+						</p:dataTable>
+
+						<p>
+							<strong>Contato(s)</strong>
+						</p>
+						<p:dataTable var="contato" value="#{l.contato}"
+							emptyMessage="Sem dados dos Contatos">
+
+							<p:column headerText="Nome:">
+								<h:outputText value="#{contato.nome}" />
+							</p:column>
+							<p:column headerText="Celular:">
+								<h:outputText value="#{contato.celular}" />
+							</p:column>
+							<p:column headerText="Celular:">
+								<h:outputText value="#{contato.telefone}" />
+							</p:column>
+							<p:column headerText="Email:">
+								<h:outputText value="#{contato.email}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</p:rowExpansion>
+				</p:dataTable>
+
+			</p:panel> -->
+
+			<p:accordionPanel value="#{controlador.listSearch}" var="l"
+				id="tabteste">
+				
+				<p:tab title="#{l.nome}">
+					<p align="center">
+						<strong>Descrição do Local</strong>
+					</p>
+					<h:panelGrid columns="2" cellpadding="5">
+
+						<h:outputText value="Nome:" style="font-weight: bold" />
+						<h:outputText value="#{l.nome}" />
+
+						<h:outputText value="Endereço:" style="font-weight: bold" />
+						<h:outputText value="#{l.logradouro}, #{l.numero} - #{l.bairro}" />
+
+						<h:outputText value="Observação:" style="font-weight: bold" />
+						<h:outputText value="#{l.observacao}" />
 					</h:panelGrid>
-				</p:column>
-				<p:column>
-					<p:panelGrid columns="2" styleClass="ui-noborder" >
-						<p:column>
-						<p:outputLabel value="Vincular Categoria: " />
-</p:column>
-<p:column width="30">
+					<p align="center">
+						<strong>Ponto(s)</strong>
+					</p>
+					<p:dataTable var="ponto" value="#{l.ponto}"
+						emptyMessage="Sem dados dos Pontos!">
 
-						<p:commandButton id="dialog" value="Cadastrar nova Categoria"
-							icon="ui-icon-extlink" type="button" onclick="PF('dlg').show()" />
-</p:column>
-					</p:panelGrid>
-				</p:column>
+						<p:column headerText="Descrição:">
+							<h:outputText value="#{ponto.descricao}" />
+						</p:column>
 
-			</p:row>
-			<p:column colspan="3">
-				<p:pickList id="pick" value="#{localController.listcategorias}"
-					var="categoria" addLabel="Adicionar" addAllLabel="Selecionar todos"
-					removeLabel="Remover" removeAllLabel="Remover todos"
-					required="true" requiredMessage="Selecione ao menos uma categoria!"
-					itemLabel="#{categoria.nome}" itemValue="#{categoria}" />
-			</p:column>
-			<p:row>
+						<p:column headerText="Observação">
+							<h:outputText value="#{ponto.observacao}" />
+						</p:column>
 
-			</p:row>
+						<p:column headerText="Status">
+							<h:outputText value="#{ponto.statusponto.nome}" />
+						</p:column>
 
-		</p:panelGrid> -->
+					</p:dataTable>
+					<br />
+					<p align="center">
+						<strong>Contato(s)</strong>
+					</p>
+					<p:dataTable var="contato" value="#{l.contato}"
+						emptyMessage="Sem dados dos Contatos">
+
+						<p:column headerText="Nome:">
+							<h:outputText value="#{contato.nome}" />
+						</p:column>
+						<p:column headerText="Celular:">
+							<h:outputText value="#{contato.celular}" />
+						</p:column>
+						<p:column headerText="Celular:">
+							<h:outputText value="#{contato.telefone}" />
+						</p:column>
+						<p:column headerText="Email:">
+							<h:outputText value="#{contato.email}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:tab>
+			</p:accordionPanel>
+
+			<p:dialog header="#{controlador.selectedLocal.nome}"
+				position="center" widgetVar="localDialog" modal="false"
+				showEffect="fade" hideEffect="fade" resizable="false">
+				<p:outputPanel id="localDetail" style="text-align:none;"
+					styleClass="ui-noborder">
+
+					<p:carousel value="#{controlador.selectedLocal}" headerText="Local"
+						var="local" numVisible="1" itemStyle="height:120px;"
+						easing="easeOutBounce" style="width:450px" cricular="true">
+						<p:panelGrid columns="2" styleClass="ui-noborder"
+							columnClasses="label,value">
+
+							<h:outputText value="Local:" />
+							<h:outputText value="#{controlador.selectedLocal.nome}" />
+
+							<h:outputText value="Endereço:" />
+							<h:outputText
+								value="#{controlador.selectedLocal.logradouro} , Nº #{controlador.selectedLocal.numero} - #{controlador.selectedLocal.bairro}" />
+
+							<h:outputText value="Complemento:" />
+							<h:outputText value="#{controlador.selectedLocal.complemento}" />
+
+							<h:outputText value="Observação:" />
+							<h:outputText value="#{controlador.selectedLocal.observacao}" />
+
+
+						</p:panelGrid>
+					</p:carousel>
+					<br />
+
+					<p:carousel value="#{controlador.selectedLocal.ponto}"
+						headerText="Ponto" var="ponto" numVisible="1"
+						itemStyle="height:auto;" easing="easeOutBounce"
+						style="width:450px">
+
+						<p:panelGrid columns="2" styleClass="ui-noborder"
+							rendered="#{not empty controlador.selectedLocal}"
+							columnClasses="label,value">
+
+							<h:outputText value="Descrição:" />
+							<h:outputText value="#{ponto.descricao}" />
+
+							<h:outputText value="Observação:" />
+							<h:outputText value="#{ponto.observacao}" />
+
+							<h:outputText value="Status:" />
+							<h:outputText value="#{ponto.statusponto.nome}" />
+
+						</p:panelGrid>
+					</p:carousel>
+					<br />
+					<p:carousel value="#{controlador.selectedLocal.contato}"
+						headerText="Contato" var="contato" numVisible="1"
+						itemStyle="height:auto;" easing="easeOutBounce"
+						style="width:450px">
+
+						<p:panelGrid columns="2" styleClass="ui-noborder"
+							rendered="#{not empty controlador.selectedLocal}"
+							columnClasses="label,value">
+
+							<h:outputText value="Nome:" />
+							<h:outputText value="#{contato.nome}" />
+
+							<h:outputText value="Celular:" />
+							<h:outputText value="#{contato.celular}" />
+
+							<h:outputText value="Telefone:" />
+							<h:outputText value="#{contato.telefone}" />
+
+							<h:outputText value="Email:" />
+							<h:outputText value="#{contato.email}" />
+
+						</p:panelGrid>
+					</p:carousel>
+
+					<!-- 	<p:panelGrid columns="2" styleClass="ui-noborder"
+						rendered="#{not empty controlador.selectedLocal}"
+						columnClasses="label,value">
+						<h:outputText value="Categoria:" />
+						<p:dataList value="#{controlador.selectedLocal.categoria}"
+							var="categoria" type="none">
+					        #{categoria.nome}
+					    </p:dataList>
+
+						<h:outputText value="Status:" />
+						<h:outputText
+							value="#{controlador.selectedLocal.statuslocal.nome}" />
+
+					</p:panelGrid> -->
+				</p:outputPanel>
+			</p:dialog>
+
+
+		</h:form>
+		<p:dialog header="Nova Categoria" widgetVar="dl" resizable="false"
+			draggable="false" responsive="true" modal="false" appendToBody="true">
+			<h:form id="detalheLoal">
+				<p:messages id="messages" autoUpdate="true" closable="true" />
+				<p:panelGrid columns="2">
+					<h:outputText value="Local: " />
+					<h:outputText styleClass="outputLabel" value="#{l.nome}" />
+					<p:commandButton value="Cancelar" style=" height:30px"
+						onclick="PF('dl').hide()" process="@this" update="@form">
+
+					</p:commandButton>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
 
 	</ui:define>
 

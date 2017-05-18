@@ -1,7 +1,10 @@
 package br.com.linkstvmorena.controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -22,7 +25,7 @@ import br.com.linkstvmorena.model.Local;
 import br.com.linkstvmorena.model.Ponto;
 import br.com.linkstvmorena.model.StatusLocal;
 import br.com.linkstvmorena.model.StatusPonto;
-import br.com.linkstvmorena.model.Status_Contato;
+import br.com.linkstvmorena.model.Status;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.Servico;
 
@@ -34,47 +37,58 @@ public class Controlador {
 	private Servico servico;
 
 	private Local local;
+	private Local selectedLocal;
 	private Ponto ponto;
 	private Categoria categoria;
 	private Contato contato;
 	private StatusLocal statuslocal;
 	private StatusPonto statusPonto;
-	private List<Status_Contato> listadestatus;
-	private List<Categoria> listadecategorias;
+	private List<Local> listadelocais;
+	private List<Status> listadestatus;
 	private List<Ponto> listaponto;
-	private List<Local> listlocal;
-	private List<Contato> listadecontato;
+	private Set<Contato> listadecontato;
 	private List<StatusLocal> liststatuslocal;
 	private List<StatusPonto> liststatusponto;
-	private List<Ponto> listagemdeponto;
+	private Set<Ponto> listagemdeponto;
 	private DualListModel<Categoria> listcategorias;
+	private List<Local> listalocal;
+	private List<Categoria> fonte;
+	private List<Categoria> alvo;
+	private String busca;
+	private boolean painel;
+	private List<Local> listSearch;
 
 	@PostConstruct
 	public void init() {
+		
+		painel = false;
+		listSearch = new ArrayList<Local>();
 		local = new Local();
 		contato = new Contato();
 		ponto = new Ponto();
 		categoria = new Categoria();
 		statuslocal = new StatusLocal();
 		statusPonto = new StatusPonto();
-		listadecategorias = new ArrayList<Categoria>();
-		listadecontato = new ArrayList<Contato>();
+		listadelocais = new ArrayList<Local>();
+		listadecontato = new HashSet<Contato>();
 		liststatusponto = new ArrayList<StatusPonto>();
-		listlocal = new ArrayList<Local>();
 		listaponto = new ArrayList<Ponto>();
-		listagemdeponto = new ArrayList<Ponto>();
+		listagemdeponto = new HashSet<>();
 		liststatuslocal = new ArrayList<>();
 
-		listadestatus = new ArrayList<Status_Contato>();
-		for (Status_Contato lc : Status_Contato.values()) {
+		listadestatus = new ArrayList<Status>();
+		for (Status lc : Status.values()) {
 			listadestatus.add(lc);
 		}
 
 		try {
+			listadelocais = servico.buscarLocal(Status.ATIVO);
 			liststatuslocal = servico.buscarStatusLocal();
 			liststatusponto = servico.buscarStatusPonto();
-			List<Categoria> fonte = servico.buscarCategorias();
-			List<Categoria> alvo = new ArrayList<Categoria>();
+			fonte = new ArrayList<Categoria>();
+			fonte = servico.buscarCategorias();
+			alvo = new ArrayList<Categoria>();
+			System.out.println("Fonte: " + fonte);
 			listcategorias = new DualListModel<Categoria>(fonte, alvo);
 
 		} catch (Exception e) {
@@ -82,94 +96,200 @@ public class Controlador {
 		}
 	}
 
-	public void salvar() {
+	public void selecaoLocal(Local l) {
+		selectedLocal = new Local();
+		selectedLocal = l;
+		System.out.println("Entrou!!");
+	}
+
+	public List<Local> search() {
+		listSearch = new ArrayList<Local>();
+		
+		try {
+			if (busca != "") {
+				painel=true;
+				listSearch = servico.buscaLocalTela(busca);
+			}else
+				return null;
+
+			System.out.println("StringBusca: " + busca);
+			System.out.println("Busca Local: " + listSearch);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	public String salvar() {
 		try {
 			servico.salvar(local);
 			init();
 			MenssagemUtil.mensagemInfo("Salvo com Sucesso!!");
+			return "localteste";
+		} catch (Exception e) {
+			MenssagemUtil.mensagemErro(e.getMessage());
+		}
+		return "";
+	}
+
+	public Local editar(Local l) {
+		try {
+			init();
+			listalocal = new ArrayList<Local>();
+			listalocal = servico.buscarPorId(l.getId());
+			for (Local ls : listalocal) {
+				this.local = ls;
+				this.listagemdeponto = ls.getPonto();
+				this.listadecontato = ls.getContato();
+				this.statuslocal = ls.getStatuslocal();
+				Iterator<Categoria> it = ls.getCategoria().iterator();
+				while (it.hasNext()) {
+					Categoria posicao = it.next();
+					this.fonte.remove(posicao);
+					this.alvo.add(posicao);
+				}
+			}
+			return this.local;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+
+	public void remover(Local l) {
+		try {
+			l.setStatus(Status.INATIVO);
+			servico.salvar(l);
+			// servico.remover(l);
+			init();
+			MenssagemUtil.mensagemInfo("Excluido com Sucesso!!");
 		} catch (Exception e) {
 			MenssagemUtil.mensagemErro(e.getMessage());
 		}
 	}
 
+	public Ponto editarPonto(Ponto p) {
+		this.listagemdeponto.remove(p);
+		this.ponto = p;
+		this.statusPonto = p.getStatusponto();
+		return this.ponto;
+	}
+
+	public Ponto excluirPonto(Ponto c) {
+		this.listagemdeponto.remove(c);
+		return this.ponto;
+	}
+
+	public Contato editarContato(Contato c) {
+		this.contato = c;
+		return this.contato;
+	}
+
+	public Contato excluirContato(Contato c) {
+		this.listadecontato.remove(c);
+		return this.contato;
+	}
+
 	public void adicionaCategoria() {
-		this.local.setCategoria(this.listcategorias.getTarget());
-		System.out.println("Lista de Categoria: "+ listcategorias.getTarget());
-		this.listlocal.add(local);
-		System.out.println("Lista de Local: "+ listlocal);
-		this.categoria.setLocal(listlocal);
-		System.out.println("Categoria: "+categoria);
-		System.out.println("Local: "+local);
+		this.local.adicionaCategorias(listcategorias.getTarget());
 	}
 
 	public void adicionaContato() {
-		this.listadecontato.add(contato);
-		this.local.setContato(listadecontato);
-		this.contato.setLocal(listlocal);
+		listadecontato.add(contato);
+		local.adicionaContatos(listadecontato);
+		contato = new Contato();
+	}
 
-		this.contato = new Contato();
+	public void carregaCategoria() {
+		List<Categoria> fonte = servico.buscarCategorias();
+		List<Categoria> alvo = new ArrayList<Categoria>();
+		listcategorias = new DualListModel<Categoria>(fonte, alvo);
 	}
 
 	public void adicionaPonto() {
-		this.listagemdeponto.add(this.ponto);
-		this.local.setPonto(listagemdeponto);
-		this.ponto.setLocal(local);
-		System.out.println("Local: " + local + " Ponto: " + ponto);
+		listagemdeponto.add(ponto);
+		local.adicionaPonto(listagemdeponto);
+		/*
+		 * this.local.setPonto(listagemdeponto); this.ponto.setLocal(local);
+		 */
 		this.ponto = new Ponto();
+		this.statusPonto = new StatusPonto();
 	}
 
 	public void adicionaStatusPonto() {
 		this.ponto.setStatusponto(statusPonto);
-		System.out.println("\nLocal: " + this.local);
-		System.out.println("Local- StatusLocal: " + this.statuslocal);
 	}
 
 	public void adicionaStatusLocal() {
 		this.local.setStatuslocal(this.statuslocal);
-		System.out.println("\nLocal: " + this.local);
-		System.out.println("Local- StatusLocal: " + this.statuslocal);
 	}
 
 	public String onFlowProcess(FlowEvent event) {
 
-		System.out.println("\nWizard-Local: " + local);
-		System.out.println("Wizard-Contato: " + contato);
-		System.out.println("Wizard-Ponto: " + ponto);
-		System.out.println("Wizard-Categoria: " + categoria);
-		System.out.println("Wizard-StatusLocal: " + statuslocal);
-
+		/*if(this.statuslocal.getNome().equals("Não Fecha Link")){
+			skip = false; // reset in case user goes back
+			init();
+			return "confirm";
+		}
+		 else {
+				return event.getNewStep();
+			}*/
+		
 		if (skip) {
-
 			skip = false; // reset in case user goes back
 			return "confirm";
 		} else {
-
 			return event.getNewStep();
 		}
-
 	}
 
-	public List<Contato> getListadecontato() {
+	public List<Local> getListSearch() {
+		return listSearch;
+	}
+
+	public void setListSearch(List<Local> listSearch) {
+		this.listSearch = listSearch;
+	}
+
+	public String getBusca() {
+		return busca;
+	}
+
+	public void setBusca(String busca) {
+		this.busca = busca;
+	}
+
+	public List<Local> getListadelocais() {
+		return listadelocais;
+	}
+
+	public void setListadelocais(List<Local> listadelocais) {
+		this.listadelocais = listadelocais;
+	}
+
+	public Set<Contato> getListadecontato() {
 		return listadecontato;
 	}
 
-	public void setListadecontato(List<Contato> listadecontato) {
+	public void setListadecontato(Set<Contato> listadecontato) {
 		this.listadecontato = listadecontato;
 	}
 
-	public List<Status_Contato> getListadestatus() {
+	public List<Status> getListadestatus() {
 		return listadestatus;
 	}
 
-	public void setListadestatus(List<Status_Contato> listadestatus) {
+	public void setListadestatus(List<Status> listadestatus) {
 		this.listadestatus = listadestatus;
 	}
 
-	public List<Ponto> getListagemdeponto() {
+	public Set<Ponto> getListagemdeponto() {
 		return listagemdeponto;
 	}
 
-	public void setListagemdeponto(List<Ponto> listagemdeponto) {
+	public void setListagemdeponto(Set<Ponto> listagemdeponto) {
 		this.listagemdeponto = listagemdeponto;
 	}
 
@@ -237,14 +357,6 @@ public class Controlador {
 		this.local = local;
 	}
 
-	public List<Local> getListlocal() {
-		return listlocal;
-	}
-
-	public void setListlocal(List<Local> listlocal) {
-		this.listlocal = listlocal;
-	}
-
 	public DualListModel<Categoria> getListcategorias() {
 		return listcategorias;
 	}
@@ -261,19 +373,28 @@ public class Controlador {
 		this.listaponto = listaponto;
 	}
 
-	public List<Categoria> getListadecategorias() {
-		return listadecategorias;
+	public Local getSelectedLocal() {
+		return selectedLocal;
 	}
 
-	public void setListadecategorias(List<Categoria> listadecategorias) {
-		this.listadecategorias = listadecategorias;
+	public void setSelectedLocal(Local selectedLocal) {
+		this.selectedLocal = selectedLocal;
+	}
+
+	public List<Local> getListalocal() {
+		return listalocal;
+	}
+
+	public void setListalocal(List<Local> listalocal) {
+		this.listalocal = listalocal;
 	}
 
 	public void onTransfer(TransferEvent event) {
-		StringBuilder builder = new StringBuilder();
-		for (Object item : event.getItems()) {
-			builder.append(((Categoria) item).getNome()).append("<br />");
-		}
+		/*
+		 * StringBuilder builder = new StringBuilder(); for (Object item :
+		 * event.getItems()) { builder.append(((Categoria)
+		 * item).getNome()).append("<br />"); }
+		 */
 		FacesMessage msg = new FacesMessage();
 		msg.setSeverity(FacesMessage.SEVERITY_INFO);
 		// msg.setSummary("Items Transferred");
@@ -303,6 +424,16 @@ public class Controlador {
 		FacesContext context = FacesContext.getCurrentInstance();
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
 	}
+
+	
+	public boolean isPainel() {
+		return painel;
+	}
+
+	public void setPainel(boolean painel) {
+		this.painel = painel;
+	}
+
 
 	private boolean skip;
 	private int step;

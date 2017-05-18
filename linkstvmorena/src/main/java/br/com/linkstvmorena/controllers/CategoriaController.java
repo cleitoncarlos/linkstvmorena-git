@@ -24,7 +24,7 @@ public class CategoriaController {
 
 	@Autowired
 	private CategoriaService categoriaService;
-	@Autowired
+	//@Autowired
 	private LocalController localController;
 	private Categoria categoria;
 	private Local local;

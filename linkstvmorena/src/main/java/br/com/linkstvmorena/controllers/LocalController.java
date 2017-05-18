@@ -25,8 +25,8 @@ import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.CategoriaService;
 import br.com.linkstvmorena.service.LocalService;
 
-@Controller
-@ViewScoped
+/*@Controller
+@ViewScoped*/
 public class LocalController {
 
 	@Autowired
@@ -149,9 +149,9 @@ public class LocalController {
 			contatoController.adicionaLocal(this.local);
 			System.out.println("Saiu, LocalController-onFlowProcess: contatoController.adicionaLocal");
 		}*/
-		this.local.setCategoria(this.listadecategorias);
+		/*this.local.setCategoria(this.listadecategorias);
 		this.local.setContato(listcontato);
-		this.local.setPonto(listaponto);
+		this.local.setPonto(listaponto);*/
 
 		System.out.println("\nWizard-Local: " + local);
 		System.out.println("Wizard-Contato: " + contato);

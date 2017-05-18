@@ -15,8 +15,8 @@ import br.com.linkstvmorena.model.StatusPonto;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.PontoService;
 
-@Controller
-@ViewScoped
+/*@Controller
+@ViewScoped*/
 public class PontoController {
 
 	@Autowired
@@ -57,7 +57,7 @@ public class PontoController {
 	}
 	public void adicionaLocal(Local l){
 		System.out.println("Entrou, PontoController-adicionaLocal.");
-		ponto.setLocal(l);
+		//ponto.setLocal(l);
 		System.out.println("PontoController - Ponto: " +ponto);
 		System.out.println("PontoController - Local: " +l);
 		System.out.println("Saiu, PontoController-adicionaLocal.");
