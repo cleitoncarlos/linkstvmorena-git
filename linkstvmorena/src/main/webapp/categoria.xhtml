@@ -8,11 +8,15 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
+		<br />
 		<h:form id="cadCategoria">
 
 			<p:messages id="messages" autoUpdate="true" closable="true" />
-			<p:fieldset legend="Manutenção de Categoria">
+			<center>
 				<p:panelGrid columns="2">
+					<f:facet name="header">
+					Cadastrar nova Categoria
+				</f:facet>
 					<p:outputLabel value="Nome: " for="nome" />
 					<p:inputText id="nome"
 						value="#{categoriaController.categoria.nome}" required="true"
@@ -29,12 +33,11 @@
 
 					</p:commandButton>
 				</p:panelGrid>
-			</p:fieldset>
+			</center>
 			<p:tab>
 				<br />
 				<p:dataTable id="tabcategoria" paginator="true" rows="5"
-					style="max-width: 550px; min-width: 550px"
-					value="#{categoriaController.listcat}" var="catlist"
+					value="#{controlador.listCategorias}" var="catlist"
 					emptyMessage="Nenhum registro." border="1">
 					<f:facet name="header">
        				Lista de Categorias

@@ -8,7 +8,7 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
-		<h2>Manutenção de Link - Teste</h2>
+		<h1 align="center">Cadastro de Local de Link </h1>
 		<h:form id="wiz">
 			<!-- <p:messages id="growl" sticky="true" /> -->
 			<p:wizard flowListener="#{controlador.onFlowProcess}"
@@ -77,7 +77,7 @@
 										<p:column width="30">
 
 											<p:commandButton id="dialog" value="Cadastrar nova Categoria"
-												icon="ui-icon-extlink" type="button"
+												icon="ui-icon-extlink" type="button" 
 												onclick="PF('dlg').show()" update="@form pick" />
 										</p:column>
 									</p:panelGrid>
@@ -518,20 +518,20 @@
 				</h:form>
 			</p:dialog>
 		</h:form>
-		<p:dialog header="Nova Categoria" widgetVar="dlg" resizable="false"
+		<p:dialog header="Nova Categoria Form" widgetVar="dlg" resizable="false"
 			draggable="false" responsive="true" modal="false" appendToBody="true">
 			<h:form>
 				<p:messages id="messages" autoUpdate="true" closable="true" />
 				<p:panelGrid columns="2">
 					<p:outputLabel value="Nome: " for="nome" />
 					<p:inputText id="nome"
-						value="#{categoriaController.categoria.nome}" required="true"
+						value="#{controlador.categoria.nome}" required="true"
 						requiredMessage="Preencha o campo NOME!" />
 
 					<p:commandButton value="Enviar" style=" height:30px"
-						actionListener="#{categoriaController.salvar()}"
+						actionListener="#{controlador.salvarCategoria()}" oncomplete="PF('dlg').hide()"
 						action="#{controlador.carregaCategoria()}" process="@form"
-						update="@form">
+						update="@form :wiz">
 
 					</p:commandButton>
 					<p:commandButton value="Cancelar" style=" height:30px"

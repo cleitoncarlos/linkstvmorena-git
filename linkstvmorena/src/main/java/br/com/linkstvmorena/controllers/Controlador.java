@@ -46,6 +46,7 @@ public class Controlador {
 	private List<Local> listadelocais;
 	private List<Status> listadestatus;
 	private List<Ponto> listaponto;
+	private List<Categoria> listCategorias;
 	private Set<Contato> listadecontato;
 	private List<StatusLocal> liststatuslocal;
 	private List<StatusPonto> liststatusponto;
@@ -60,7 +61,7 @@ public class Controlador {
 
 	@PostConstruct
 	public void init() {
-		
+
 		painel = false;
 		listSearch = new ArrayList<Local>();
 		local = new Local();
@@ -75,6 +76,7 @@ public class Controlador {
 		listaponto = new ArrayList<Ponto>();
 		listagemdeponto = new HashSet<>();
 		liststatuslocal = new ArrayList<>();
+		listCategorias = new ArrayList<>();
 
 		listadestatus = new ArrayList<Status>();
 		for (Status lc : Status.values()) {
@@ -85,6 +87,7 @@ public class Controlador {
 			listadelocais = servico.buscarLocal(Status.ATIVO);
 			liststatuslocal = servico.buscarStatusLocal();
 			liststatusponto = servico.buscarStatusPonto();
+			listCategorias = servico.buscarCategorias();
 			fonte = new ArrayList<Categoria>();
 			fonte = servico.buscarCategorias();
 			alvo = new ArrayList<Categoria>();
@@ -104,12 +107,12 @@ public class Controlador {
 
 	public List<Local> search() {
 		listSearch = new ArrayList<Local>();
-		
+
 		try {
 			if (busca != "") {
-				painel=true;
+				painel = true;
 				listSearch = servico.buscaLocalTela(busca);
-			}else
+			} else
 				return null;
 
 			System.out.println("StringBusca: " + busca);
@@ -126,6 +129,7 @@ public class Controlador {
 		try {
 			servico.salvar(local);
 			init();
+			System.out.println("Ok!");
 			MenssagemUtil.mensagemInfo("Salvo com Sucesso!!");
 			return "localteste";
 		} catch (Exception e) {
@@ -202,10 +206,22 @@ public class Controlador {
 		contato = new Contato();
 	}
 
+	public void salvarCategoria() {
+		try {
+			servico.salvarCategoria(categoria);
+			init();
+			MenssagemUtil.mensagemInfo("Salvo com Sucesso!!");
+		} catch (Exception e) {
+			MenssagemUtil.mensagemErro(e.getMessage());
+		}
+	}
+
 	public void carregaCategoria() {
+		System.out.println("Entrou Carrega Categoria!!");
 		List<Categoria> fonte = servico.buscarCategorias();
 		List<Categoria> alvo = new ArrayList<Categoria>();
-		listcategorias = new DualListModel<Categoria>(fonte, alvo);
+		this.listcategorias = new DualListModel<Categoria>(fonte, alvo);
+		System.out.println("Lista de categorias: " + listcategorias);
 	}
 
 	public void adicionaPonto() {
@@ -228,15 +244,12 @@ public class Controlador {
 
 	public String onFlowProcess(FlowEvent event) {
 
-		/*if(this.statuslocal.getNome().equals("Não Fecha Link")){
-			skip = false; // reset in case user goes back
-			init();
-			return "confirm";
-		}
-		 else {
-				return event.getNewStep();
-			}*/
-		
+		/*
+		 * if(this.statuslocal.getNome().equals("Não Fecha Link")){ skip =
+		 * false; // reset in case user goes back init(); return "confirm"; }
+		 * else { return event.getNewStep(); }
+		 */
+
 		if (skip) {
 			skip = false; // reset in case user goes back
 			return "confirm";
@@ -425,7 +438,6 @@ public class Controlador {
 		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
 	}
 
-	
 	public boolean isPainel() {
 		return painel;
 	}
@@ -433,7 +445,6 @@ public class Controlador {
 	public void setPainel(boolean painel) {
 		this.painel = painel;
 	}
-
 
 	private boolean skip;
 	private int step;
@@ -452,6 +463,14 @@ public class Controlador {
 
 	public void setStep(int step) {
 		this.step = step;
+	}
+
+	public List<Categoria> getListCategorias() {
+		return listCategorias;
+	}
+
+	public void setListCategorias(List<Categoria> listCategorias) {
+		this.listCategorias = listCategorias;
 	}
 
 }
