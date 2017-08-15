@@ -1,6 +1,7 @@
 package br.com.linkstvmorena.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class Local implements Serializable {
@@ -33,6 +36,8 @@ public class Local implements Serializable {
 	private String cep;
 	private String numero;
 	private String bairro;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar dataCadastro;
 	private String complemento;
 	private String observacao;
 
@@ -167,9 +172,18 @@ public class Local implements Serializable {
 		return observacao;
 	}
 
+	public Calendar getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Calendar dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+	
 
 	@Override
 	public String toString() {

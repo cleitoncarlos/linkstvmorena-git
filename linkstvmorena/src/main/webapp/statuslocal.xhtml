@@ -8,10 +8,15 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
+		<br />
 		<h:form id="cadStatus">
-		<p:messages id="messages" autoUpdate="true" closable="true" />
-			<p:fieldset legend="Manutenção de Status do Local">
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+			<center>
 				<p:panelGrid columns="2">
+					<f:facet name="header">
+					Cadastrar novo Status do Local
+				</f:facet>
 					<p:outputLabel value="Nome: " for="nome" />
 					<p:inputText id="nome"
 						value="#{statusLocalController.statuslocal.nome}" required="true"
@@ -27,13 +32,12 @@
 						update="@form :cadStatus">
 
 					</p:commandButton>
-					</p:panelGrid>
-			</p:fieldset>
-			<br />
+				</p:panelGrid>
+			</center>
+
 			<p:tab>
 				<br />
 				<p:dataTable id="tabstatus" paginator="true" rows="5"
-					style="max-width: 550px; min-width: 550px"
 					value="#{statusLocalController.liststatuslocal}" var="statuslist"
 					emptyMessage="Nenhum registro." border="1">
 					<f:facet name="header">

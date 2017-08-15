@@ -8,10 +8,15 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
+			<br />
 		<h:form id="cadStatus">
-		<p:messages id="messages" autoUpdate="true" closable="true" />
-			<p:fieldset legend="Manutenção de Status do Ponto">
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+			<center>
+
 				<p:panelGrid columns="2">
+					<f:facet name="header">
+					Cadastrar novo Status de Ponto
+				</f:facet>
 					<p:outputLabel value="Nome: " for="nome" />
 					<p:inputText id="nome"
 						value="#{statusPontoController.statusponto.nome}" required="true"
@@ -27,42 +32,40 @@
 						update="@form :cadStatus">
 
 					</p:commandButton>
-					</p:panelGrid>
-			</p:fieldset>
-			<br />
-			<p:tab>
+				</p:panelGrid>
 				<br />
-				<p:dataTable id="tabstatus" paginator="true" rows="5"
-					style="max-width: 550px; min-width: 550px"
-					value="#{statusPontoController.liststatus}" var="statuslist"
-					emptyMessage="Nenhum registro." border="1">
-					<f:facet name="header">
+				<p:tab>
+					<br />
+					<p:dataTable id="tabstatus" paginator="true" rows="5"
+						value="#{statusPontoController.liststatus}" var="statuslist"
+						emptyMessage="Nenhum registro." border="1">
+						<f:facet name="header">
        				Lista de Categorias
     				</f:facet>
-					<p:column>
-						<f:facet name="header">ID</f:facet>
-						<h:outputLabel value="#{statuslist.id}"></h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">Nome</f:facet>
-						<h:outputLabel value="#{statuslist.nome}"></h:outputLabel>
-					</p:column>
+						<p:column>
+							<f:facet name="header">ID</f:facet>
+							<h:outputLabel value="#{statuslist.id}"></h:outputLabel>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Nome</f:facet>
+							<h:outputLabel value="#{statuslist.nome}"></h:outputLabel>
+						</p:column>
 
-					<p:column width="70">
-						<f:facet name="header">Ação</f:facet>
-						<p:commandButton
-							actionListener="#{statusPontoController.excluir(statuslist)}"
-							icon="ui-icon-close" style="width:30px; heigt:30px"
-							process="@this" immediate="true" update="@form :cadStatus" />
-						<p:commandButton
-							actionListener="#{statusPontoController.editar(statuslist)}"
-							icon="ui-icon-pencil" style="width:30px; heigt:30px"
-							update="@form :cadStatus" process="@this" />
+						<p:column width="70">
+							<f:facet name="header">Ação</f:facet>
+							<p:commandButton
+								actionListener="#{statusPontoController.excluir(statuslist)}"
+								icon="ui-icon-close" style="width:30px; heigt:30px"
+								process="@this" immediate="true" update="@form :cadStatus" />
+							<p:commandButton
+								actionListener="#{statusPontoController.editar(statuslist)}"
+								icon="ui-icon-pencil" style="width:30px; heigt:30px"
+								update="@form :cadStatus" process="@this" />
 
-					</p:column>
-				</p:dataTable>
-			</p:tab>
-
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+			</center>
 		</h:form>
 	</ui:define>
 </ui:composition>

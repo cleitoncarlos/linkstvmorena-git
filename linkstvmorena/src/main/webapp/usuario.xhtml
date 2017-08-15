@@ -9,58 +9,81 @@
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
 		<br />
-		<h:form id="cadCategoria">
+		<h:form id="cadUsuario">
 
 			<p:messages id="messages" autoUpdate="true" closable="true" />
 			<center>
 				<p:panelGrid columns="2">
 					<f:facet name="header">
-					Cadastrar nova Categoria
+					Cadastrar novo Usuario
 				  </f:facet>
 					<p:outputLabel value="Nome: " for="nome" />
-					<p:inputText id="nome"
-						value="#{categoriaController.categoria.nome}" required="true"
+					<p:inputText id="nome" value="#{usuarioController.usuario.nome}"
+						required="true" requiredMessage="Preencha o campo NOME!" />
+
+					<p:outputLabel value="Username: " for="username" />
+					<p:inputText id="username"
+						value="#{usuarioController.usuario.username}" required="true"
 						requiredMessage="Preencha o campo NOME!" />
 
+					<h:outputText value="Permissao: " />
+					<p:selectOneMenu id="permissao" required="true" 
+						value="#{usuarioController.usuario.permissao}">
+						<f:selectItem noSelectionOption="true">selecione uma Permissao</f:selectItem>
+						<f:selectItems value="#{usuarioController.listagemPermissao}"
+							var="l" itemValue="#{l}" itemLabel="#{l.nome}" />
+
+					</p:selectOneMenu>
+
+					<p:outputLabel value="Senha: " for="senha" />
+					<p:password id="senha" value="#{usuarioController.usuario.senha}"
+						feedback="true" required="true"
+						requiredMessage="Preencha o campo senha!" />
+
 					<p:commandButton value="Enviar" style=" height:30px"
-						action="#{categoriaController.salvar()}" process="@form"
-						update="@form :cadCategoria">
+						action="#{usuarioController.salvar()}" process="@form"
+						update="@form :cadUsuario">
 
 					</p:commandButton>
 					<p:commandButton value="Cancelar" style=" height:30px"
-						action="#{categoriaController.cancelar()}" process="@form"
-						update="@form :cadCategoria">
+						action="#{usuarioController.cancelar()}" process="@form"
+						update="@form :cadUsuario">
 
 					</p:commandButton>
 				</p:panelGrid>
 			</center>
 			<p:tab>
 				<br />
-				<p:dataTable id="tabcategoria" paginator="true" rows="5"
-					value="#{controlador.listCategorias}" var="catlist"
+				<p:dataTable id="tabusuario" paginator="true" rows="5"
+					value="#{usuarioController.listagemUsuario}" var="usuario"
 					emptyMessage="Nenhum registro." border="1">
 					<f:facet name="header">
-       				Lista de Categorias
+       				Usuarios Cadastrados
     				</f:facet>
 					<p:column>
 						<f:facet name="header">ID</f:facet>
-						<h:outputLabel value="#{catlist.id}"></h:outputLabel>
+						<h:outputLabel value="#{usuario.id}"></h:outputLabel>
 					</p:column>
 					<p:column>
 						<f:facet name="header">Nome</f:facet>
-						<h:outputLabel value="#{catlist.nome}"></h:outputLabel>
+						<h:outputLabel value="#{usuario.nome}"></h:outputLabel>
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">Username</f:facet>
+						<h:outputLabel value="#{usuario.username}"></h:outputLabel>
 					</p:column>
 
 					<p:column width="70">
 						<f:facet name="header">Ação</f:facet>
 						<p:commandButton
-							actionListener="#{categoriaController.excluir(catlist)}"
+							actionListener="#{categoriaController.excluir(usuario)}"
 							icon="ui-icon-close" style="width:30px; heigt:30px"
-							process="@this" immediate="true" update="@form :cadCategoria" />
+							process="@this" immediate="true" update="@form :cadUsuario" />
 						<p:commandButton
-							actionListener="#{categoriaController.editar(catlist)}"
+							actionListener="#{categoriaController.editar(usuario)}"
 							icon="ui-icon-pencil" style="width:30px; heigt:30px"
-							update="@form :cadCategoria" process="@this" />
+							update="@form :cadUsuario" process="@this" />
 
 						<!-- <p:commandButton
 					actionListener="#"
@@ -103,9 +126,9 @@
 				footer="Confirmar Exclusão?" style="text-align:center">
 				<p:commandButton id="confirm" value="Sim"
 					oncomplete="PF('confirmation').hide()" action="#"
-					update="@form :cadCategoria" />
+					update="@form :cadUsuario" />
 				<p:commandButton id="decline" value="Não" actionListener="#"
-					update="@form :cadCategoria" onclick="PF('confirmation').hide()" />
+					update="@form :cadUsuario" onclick="PF('confirmation').hide()" />
 			</p:dialog>
 		</h:form>
 	</ui:define>

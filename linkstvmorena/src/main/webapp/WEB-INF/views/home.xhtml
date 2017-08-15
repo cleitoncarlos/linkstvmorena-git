@@ -23,7 +23,7 @@
 				</p:inputText>
 
 			</div>
-
+	
 			<br />
 			<!-- <p align="left">
 				<strong>Resultado da Busca</strong>
@@ -148,11 +148,6 @@
 					</p>
 					<h:panelGrid columns="2" cellpadding="5">
 
-						<h:outputText value="Data Cadastro:" style="font-weight: bold" />
-						<h:outputText value="#{l.dataCadastro.time}" >
-						<f:convertDateTime  dateStyle="long" pattern="dd/MM/yyyy HH:mm" />
-						</h:outputText>
-
 						<h:outputText value="Nome:" style="font-weight: bold" />
 						<h:outputText value="#{l.nome}" />
 
@@ -161,7 +156,7 @@
 
 						<h:outputText value="Observação:" style="font-weight: bold" />
 						<h:outputText value="#{l.observacao}" />
-
+						
 					</h:panelGrid>
 					<p:separator />
 					<p align="center">
@@ -196,7 +191,7 @@
 						<p:column headerText="Celular:">
 							<h:outputText value="#{contato.celular}" />
 						</p:column>
-						<p:column headerText="Telefone:">
+						<p:column headerText="Celular:">
 							<h:outputText value="#{contato.telefone}" />
 						</p:column>
 						<p:column headerText="Email:">

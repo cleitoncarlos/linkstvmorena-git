@@ -1,6 +1,7 @@
 package br.com.linkstvmorena.controllers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,14 +19,18 @@ import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import br.com.cleiton.Consulta;
+import br.com.correios.bsb.sigep.master.bean.cliente.EnderecoERP;
 import br.com.linkstvmorena.model.Categoria;
 import br.com.linkstvmorena.model.Contato;
 import br.com.linkstvmorena.model.Local;
 import br.com.linkstvmorena.model.Ponto;
+import br.com.linkstvmorena.model.Status;
 import br.com.linkstvmorena.model.StatusLocal;
 import br.com.linkstvmorena.model.StatusPonto;
-import br.com.linkstvmorena.model.Status;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.Servico;
 
@@ -112,6 +117,10 @@ public class Controlador {
 			if (busca != "") {
 				painel = true;
 				listSearch = servico.buscaLocalTela(busca);
+				if (listSearch.isEmpty()) {
+					MenssagemUtil.mensagemInfo("Local nao encontrado!!");
+					System.out.println("Nao encontrado!!");
+				}
 			} else
 				return null;
 
@@ -124,9 +133,18 @@ public class Controlador {
 		return null;
 
 	}
+	@RequestMapping("/home") //Define a url que quando for requisitada chamara o metodo
+	public String inicio(){
+		 //Retorna a view que deve ser chamada, no caso home (home.jsp) aqui o .jsp é omitido
+		return "home";
+	}
+	public String home(){
+		return "home";
+	}
 
 	public String salvar() {
 		try {
+			local.setDataCadastro(Calendar.getInstance());
 			servico.salvar(local);
 			init();
 			System.out.println("Ok!");
@@ -179,6 +197,18 @@ public class Controlador {
 		this.ponto = p;
 		this.statusPonto = p.getStatusponto();
 		return this.ponto;
+	}
+
+	public void buscarCep() {
+		Consulta consulta = new Consulta();
+		EnderecoERP buscaCep = consulta.buscaCep(this.local.getCep());
+
+		this.local.setBairro(buscaCep.getBairro());
+		this.local.setLogradouro(buscaCep.getEnd());
+		this.local.setComplemento(buscaCep.getComplemento());
+
+		System.out.println("Endereço: " + buscaCep.getEnd() + " Bairro: " + buscaCep.getBairro() + "Complemento: "
+				+ buscaCep.getComplemento());
 	}
 
 	public Ponto excluirPonto(Ponto c) {

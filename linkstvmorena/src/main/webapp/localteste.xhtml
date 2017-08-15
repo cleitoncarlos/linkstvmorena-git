@@ -8,7 +8,7 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
-		<h1 align="center">Cadastro de Local de Link </h1>
+		<h1 align="center">Cadastro de Local de Link</h1>
 		<h:form id="wiz">
 			<!-- <p:messages id="growl" sticky="true" /> -->
 			<p:wizard flowListener="#{controlador.onFlowProcess}"
@@ -16,17 +16,24 @@
 				<!-- Cadastro de Endereço -->
 				<p:tab id="endereco" title="Endereço">
 					<p:panel header="Detalhes do Endereço">
-						<p:panelGrid>
+						<p:panelGrid >
 							<p:row>
 								<p:column rowspan="2">
 									<h:panelGrid columns="2" columnClasses="label, value"
-										layout="grid" styleClass="ui-noborder">
+										layout="grid" styleClass="">
 
 										<p:outputLabel value="Nome: " for="nomelocal" />
 										<p:inputText id="nomelocal" value="#{controlador.local.nome}"
 											required="true" size="50" />
 										<p:message for="nomelocal" display="tooltip" />
 										<p:tooltip for="nomelocal" value="Digite o Nome do Local" />
+
+										<p:outputLabel value="CEP: " for="cep" />
+										<p:inputMask mask="99.999-999" id="cep"
+											value="#{controlador.local.cep}" size="10">
+											<p:ajax event="keyup" listener="#{controlador.buscarCep()}"
+												update=" logradouro bairro" delay="1200" />
+										</p:inputMask>
 
 										<p:outputLabel value="Logradouro: " for="logradouro" />
 										<p:inputText id="logradouro"
@@ -38,10 +45,6 @@
 										<p:outputLabel value="Número: " for="numero" />
 										<p:inputText id="numero" value="#{controlador.local.numero}"
 											size="10" />
-
-										<p:outputLabel value="CEP: " for="cep" />
-										<p:inputMask mask="99.999-999" id="cep"
-											value="#{controlador.local.cep}" size="10" />
 
 										<p:outputLabel value="Bairro: " for="bairro" />
 										<p:inputText id="bairro" value="#{controlador.local.bairro}"
@@ -77,14 +80,14 @@
 										<p:column width="30">
 
 											<p:commandButton id="dialog" value="Cadastrar nova Categoria"
-												icon="ui-icon-extlink" type="button" 
+												icon="ui-icon-extlink" type="button"
 												onclick="PF('dlg').show()" update="@form pick" />
 										</p:column>
 									</p:panelGrid>
 								</p:column>
 
 							</p:row>
-							<p:column colspan="3">
+							<p:column colspan="3" >
 								<p:growl id="msg" escape="false" />
 								<p:pickList id="pick" value="#{controlador.listcategorias}"
 									var="categoria" addLabel="Adicionar" required="true"
@@ -97,9 +100,7 @@
 
 								</p:pickList>
 							</p:column>
-							<p:row>
-
-							</p:row>
+							
 						</p:panelGrid>
 						<!-- 
 						<h:outputText value="ir para o último: " />
@@ -253,9 +254,10 @@
 												update="@form" process="@this" />
 
 											<p:commandButton
-												actionListener="#{controlador.editarContato(contato)}" title="Incluir um Contato Existente"
-												icon="ui-icon-plus" style="width:30px; height:20px"
-												update="@form" process="@this" />
+												actionListener="#{controlador.editarContato(contato)}"
+												title="Incluir um Contato Existente" icon="ui-icon-plus"
+												style="width:30px; height:20px" update="@form"
+												process="@this" />
 										</p:column>
 									</p:dataTable>
 								</p:column>
@@ -518,18 +520,19 @@
 				</h:form>
 			</p:dialog>
 		</h:form>
-		<p:dialog header="Nova Categoria Form" widgetVar="dlg" resizable="false"
-			draggable="false" responsive="true" modal="false" appendToBody="true">
+		<p:dialog header="Nova Categoria Form" widgetVar="dlg"
+			resizable="false" draggable="false" responsive="true" modal="false"
+			appendToBody="true">
 			<h:form>
 				<p:messages id="messages" autoUpdate="true" closable="true" />
 				<p:panelGrid columns="2">
 					<p:outputLabel value="Nome: " for="nome" />
-					<p:inputText id="nome"
-						value="#{controlador.categoria.nome}" required="true"
-						requiredMessage="Preencha o campo NOME!" />
+					<p:inputText id="nome" value="#{controlador.categoria.nome}"
+						required="true" requiredMessage="Preencha o campo NOME!" />
 
 					<p:commandButton value="Enviar" style=" height:30px"
-						actionListener="#{controlador.salvarCategoria()}" oncomplete="PF('dlg').hide()"
+						actionListener="#{controlador.salvarCategoria()}"
+						oncomplete="PF('dlg').hide()"
 						action="#{controlador.carregaCategoria()}" process="@form"
 						update="@form :wiz">
 
