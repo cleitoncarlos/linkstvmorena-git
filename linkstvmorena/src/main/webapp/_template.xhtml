@@ -32,12 +32,15 @@
 	<p:layout fullPage="true">
 		<p:layoutUnit position="center" style="border:0; margin-top:none">
 			<h:form>
-
+				<p:messages id="messages" closable="true" />
+				<p:graphicImage library="images" name="consulta_link.png" width="100%"/>
 				<p:menubar toggleable="true">
 
 					<p:submenu label="Categoria">
 						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
-							outcome="categoria" />
+							outcome="categoria" update="messages" >
+							<p:ajax event="click" immediate="true" process="@this" listener="#{usuarioController.verificaUsuarioLogado()}" update="messages"  />
+							</p:menuitem>
 
 					</p:submenu>
 					<p:submenu label="Local">
@@ -57,12 +60,12 @@
 						<p:menuitem value="External" icon="ui-icon-home" />
 						<p:menuitem value="Internal" icon="ui-icon-star" />
 					</p:submenu>
-					
+
 					<p:submenu label="Usuarios">
 						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
 							outcome="usuario" />
 					</p:submenu>
-					
+
 					<f:facet name="options">
 						<p:commandButton icon="ui-icon-home" action="home" ajax="false"
 							immediate="true" />
@@ -81,7 +84,7 @@
 			resizable="false" draggable="false" responsive="true" modal="true"
 			appendToBody="true">
 			<h:form>
-				<p:messages id="messages" autoUpdate="true" closable="true" />
+				<p:messages id="messages"  closable="true" />
 				<p:panelGrid columns="2">
 					<p:outputLabel value="Nome: " for="nome" />
 					<p:inputText id="nome" value="#{controlador.categoria.nome}"
@@ -114,3 +117,4 @@
 			</p:dialog>
 </h:body>
 </html>
+

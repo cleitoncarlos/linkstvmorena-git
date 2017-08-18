@@ -12,7 +12,7 @@
 			Link</h1>
 		<br />
 		<h:form id="formhome">
-			<p:growl id="m" auautoUpdate="true" />
+			<p:growl id="m"  />
 
 			<div align="center">
 				<p:inputText style="width:700px; margin-left:"
@@ -178,7 +178,7 @@
 							<h:outputText value="#{ponto.observacao}" />
 						</p:column>
 
-						<p:column headerText="Status">
+						<p:column headerText="Recursos">
 							<h:outputText value="#{ponto.statusponto.nome}" />
 						</p:column>
 
@@ -304,7 +304,7 @@
 		<p:dialog header="Nova Categoria" widgetVar="dl" resizable="false"
 			draggable="false" responsive="true" modal="false" appendToBody="true">
 			<h:form id="detalheLoal">
-				<p:messages id="messages" autoUpdate="true" closable="true" />
+				<p:messages id="messages" closable="true" />
 				<p:panelGrid columns="2">
 					<h:outputText value="Local: " />
 					<h:outputText styleClass="outputLabel" value="#{l.nome}" />

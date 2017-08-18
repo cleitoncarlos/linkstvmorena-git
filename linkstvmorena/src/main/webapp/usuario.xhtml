@@ -46,7 +46,7 @@
 
 					</p:commandButton>
 					<p:commandButton value="Cancelar" style=" height:30px"
-						action="#{usuarioController.cancelar()}" process="@form"
+						action="#{usuarioController.cancelar()}" process="@form" immediate="true"
 						update="@form :cadUsuario">
 
 					</p:commandButton>
@@ -73,15 +73,20 @@
 						<f:facet name="header">Username</f:facet>
 						<h:outputLabel value="#{usuario.username}"></h:outputLabel>
 					</p:column>
+					
+					<p:column>
+						<f:facet name="header">Senha</f:facet>
+						<h:outputLabel value="#{usuario.senha}"></h:outputLabel>
+					</p:column>
 
 					<p:column width="70">
 						<f:facet name="header">Ação</f:facet>
 						<p:commandButton
-							actionListener="#{categoriaController.excluir(usuario)}"
+							actionListener="#{usuarioController.excluir(usuario)}"
 							icon="ui-icon-close" style="width:30px; heigt:30px"
-							process="@this" immediate="true" update="@form :cadUsuario" />
+							process="@this" update="@form :cadUsuario" />
 						<p:commandButton
-							actionListener="#{categoriaController.editar(usuario)}"
+							actionListener="#{usuarioController.editar(usuario)}"
 							icon="ui-icon-pencil" style="width:30px; heigt:30px"
 							update="@form :cadUsuario" process="@this" />
 

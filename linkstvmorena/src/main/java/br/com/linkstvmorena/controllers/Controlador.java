@@ -118,7 +118,7 @@ public class Controlador {
 				painel = true;
 				listSearch = servico.buscaLocalTela(busca);
 				if (listSearch.isEmpty()) {
-					MenssagemUtil.mensagemInfo("Local nao encontrado!!");
+					MenssagemUtil.mensagemInfo("Local nāo encontrado!!");
 					System.out.println("Nao encontrado!!");
 				}
 			} else
