@@ -8,11 +8,12 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="conteudo">
-		<h1 align="center" style="padding-top: 40px">Pesquisar Local de
-			Link</h1>
+		<p align="center"
+			style="padding-top: 40px; font-size: 60px; font-family: avantgarde-book, sans-serif, arial, helveticacomic sans ms,amaranth;">Pesquisar
+			Local de Link</p>
 		<br />
 		<h:form id="formhome">
-			<p:growl id="m"  />
+			<p:growl id="m" />
 
 			<div align="center">
 				<p:inputText style="width:700px; margin-left:"
@@ -25,118 +26,10 @@
 			</div>
 
 			<br />
-			<!-- <p align="left">
-				<strong>Resultado da Busca</strong>
-			</p> -->
-			<!-- 		<p:panel style="border:none">
-				<p:dataTable id="tabcategoria" paginator="false"
-					paginatorPosition="bottom" rows="10"
-					value="#{controlador.listSearch}" var="l"
-					emptyMessage="Sua Pesquisa não Retornou nenhum Resultado">
-					<f:facet name="header">
-        				Resultado da Busca
-     				</f:facet>
-					<p:column style="width:16px">
-						<p:rowToggler />
-					</p:column>
-					<p:column>
-						<f:facet name="header">Local</f:facet>
-						<h:outputLabel value="#{l.nome}"></h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">Endereço</f:facet>
-						<h:outputLabel value="#{l.logradouro}"></h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">Numero</f:facet>
-						<h:outputLabel value="#{l.numero}"></h:outputLabel>
-					</p:column>
-					<p:column>
-						<f:facet name="header">Status</f:facet>
-						<h:outputLabel value="#{l.statuslocal.nome}"></h:outputLabel>
-					</p:column>
 
-					<p:column style="">
-						<f:facet name="header">Ação</f:facet>
-						<p:commandButton icon="ui-icon-search" id="b"
-							style="width:30px; heigt:30px" process="@form"
-							title="Ver Detalhes" update=":formhome:localDetail:"
-							onclick="PF('localDialog').show()">
-							<f:setPropertyActionListener value="#{l}" for="b"
-								target="#{controlador.selectedLocal}" />
-						</p:commandButton>
-					<p:commandButton actionListener="#{controlador.editar(l)}"
-							title="Editar" icon="ui-icon-pencil"
-							style="width:30px; heigt:30px" update="@form" process="@this" />
 
-						<p:commandButton actionListener="#{controlador.remover(l)}"
-							title="Excluir" icon="ui-icon-close"
-							style="width:30px; heigt:30px" process="@this" immediate="true"
-							update="@form " /> 
-					</p:column>
-					<p:rowExpansion>
-						<p:panelGrid columns="2" styleClass="ui-noborder"
-							columnClasses="label,value">
 
-							<h:outputText value="Local:" />
-							<h:outputText value="#{l.nome}" />
 
-							<h:outputText value="Endereço:" />
-							<h:outputText
-								value="#{l.logradouro} , Nº #{l.numero} - #{l.bairro}" />
-
-							<h:outputText value="Complemento:" />
-							<h:outputText value="#{l.complemento}" />
-
-							<h:outputText value="Observação:" />
-							<h:outputText value="#{l.observacao}" />
-
-						</p:panelGrid>
-						<p>
-							<strong>#{l.nome}</strong>, fecha link destes Pontos abaixo:
-						</p>
-						<p:dataTable var="ponto" value="#{l.ponto}"
-							emptyMessage="Sem dados dos Pontos!">
-
-							<p:column headerText="Descrição:">
-								<h:outputText value="#{ponto.descricao}" />
-							</p:column>
-
-							<p:column headerText="Observação">
-								<h:outputText value="#{ponto.observacao}" />
-							</p:column>
-
-							<p:column headerText="Status">
-								<h:outputText value="#{ponto.statusponto.nome}" />
-							</p:column>
-
-						</p:dataTable>
-
-						<p>
-							<strong>Contato(s)</strong>
-						</p>
-						<p:dataTable var="contato" value="#{l.contato}"
-							emptyMessage="Sem dados dos Contatos">
-
-							<p:column headerText="Nome:">
-								<h:outputText value="#{contato.nome}" />
-							</p:column>
-							<p:column headerText="Celular:">
-								<h:outputText value="#{contato.celular}" />
-							</p:column>
-							<p:column headerText="Celular:">
-								<h:outputText value="#{contato.telefone}" />
-							</p:column>
-							<p:column headerText="Email:">
-								<h:outputText value="#{contato.email}" />
-							</p:column>
-
-						</p:dataTable>
-
-					</p:rowExpansion>
-				</p:dataTable>
-
-			</p:panel> -->
 
 			<p:accordionPanel value="#{controlador.listSearch}" var="l"
 				id="tabteste" activeIndex="null">
@@ -146,23 +39,45 @@
 						<strong>Descrição do Local</strong>
 						<p:separator />
 					</p>
-					<h:panelGrid columns="2" cellpadding="5">
+					<p:panelGrid columns="2" style="width:100%"
+						styleClass="ui-noborder">
+						<h:panelGrid columns="2" cellpadding="5">
 
-						<h:outputText value="Data Cadastro:" style="font-weight: bold" />
-						<h:outputText value="#{l.dataCadastro.time}" >
-						<f:convertDateTime  dateStyle="long" pattern="dd/MM/yyyy HH:mm" />
-						</h:outputText>
+							<h:outputText value="Data Cadastro:" style="font-weight: bold" />
+							<h:outputText value="#{l.dataCadastro.time}">
+								<f:convertDateTime dateStyle="long" pattern="dd/MM/yyyy HH:mm" />
+							</h:outputText>
 
-						<h:outputText value="Nome:" style="font-weight: bold" />
-						<h:outputText value="#{l.nome}" />
+							<h:outputText value="Nome:" style="font-weight: bold" />
+							<h:outputText value="#{l.nome}" />
 
-						<h:outputText value="Endereço:" style="font-weight: bold" />
-						<h:outputText value="#{l.logradouro}, #{l.numero} - #{l.bairro}" />
+							<h:outputText value="Endereço:" style="font-weight: bold" />
+							<h:outputText value="#{l.logradouro}, #{l.numero} - #{l.bairro}" />
 
-						<h:outputText value="Observação:" style="font-weight: bold" />
-						<h:outputText value="#{l.observacao}" />
+							<h:outputText value="Observação:" style="font-weight: bold" />
+							<h:outputText value="#{l.observacao}" />
 
-					</h:panelGrid>
+						</h:panelGrid>
+						<h:panelGroup>
+							<p:commandButton type="button"
+								onclick="PF('switcher').previous();"
+								icon="ui-icon-circle-triangle-w" id="prev" />
+							<p:commandButton type="button" onclick="PF('switcher').next();"
+								icon="ui-icon-circle-triangle-e" id="next" />
+
+							<p:imageSwitch effect="wipe" widgetVar="switcher"
+								id="manuelSwitcher" slideshowAuto="false">
+								<ui:repeat value="#{controlador.listaImagens()}" var="image"
+									id="manuelSwitcherImages">
+									<p:graphicImage value="/img/#{image.descricao}" id="image"
+										height="300" width="500" />
+								</ui:repeat>
+							</p:imageSwitch>
+						</h:panelGroup>
+
+
+					</p:panelGrid>
+
 					<p:separator />
 					<p align="center">
 						<strong>Ponto(s)</strong>
@@ -206,6 +121,7 @@
 					</p:dataTable>
 				</p:tab>
 			</p:accordionPanel>
+
 
 			<p:dialog header="#{controlador.selectedLocal.nome}"
 				position="center" widgetVar="localDialog" modal="false"

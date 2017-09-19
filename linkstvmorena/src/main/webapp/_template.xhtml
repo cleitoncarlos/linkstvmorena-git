@@ -7,6 +7,8 @@
 	xmlns:of="http://omnifaces.org/functions">
 
 <h:head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="content-type" content="text/xhtml; charset=UTF-8" />
 	<script>
 			function next(){
 				PF('wizard').next();
@@ -31,46 +33,71 @@
 <h:body style="background-color:#fff">
 	<p:layout fullPage="true">
 		<p:layoutUnit position="center" style="border:0; margin-top:none">
-			<h:form>
-				<p:messages id="messages" closable="true" />
-				<p:graphicImage library="images" name="consulta_link.png" width="100%"/>
-				<p:menubar toggleable="true">
+			<h:form id="fomTemplate">
+				<p:growl id="messages" closable="true" />
+				<p:graphicImage library="images" name="consulta_link.png"
+					width="100%" />
+
+				<p:menubar toggleable="true" id="menu"
+					rendered="#{usuarioController.verificaUsuarioLogado() ==true}">
 
 					<p:submenu label="Categoria">
 						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
-							outcome="categoria" update="messages" >
-							<p:ajax event="click" immediate="true" process="@this" listener="#{usuarioController.verificaUsuarioLogado()}" update="messages"  />
-							</p:menuitem>
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}"
+							outcome="categoria" update="messages">
+						</p:menuitem>
 
 					</p:submenu>
 					<p:submenu label="Local">
 						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
-							outcome="localteste" />
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}"
+							outcome="localteste.xhtml" />
 
 					</p:submenu>
 					<p:submenu label="Status Ponto">
-						<p:menuitem value="Cadastrar" icon="ui-icon-disk" outcome="status" />
+						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}"
+							outcome="status.xhtml" />
 
 					</p:submenu>
 					<p:submenu label="Status Local">
 						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
-							outcome="statuslocal" />
-						<p:menuitem value="Alterar" icon="ui-icon-arrowrefresh-1-w" />
-						<p:menuitem value="Excluir" icon="ui-icon-close" />
-						<p:menuitem value="External" icon="ui-icon-home" />
-						<p:menuitem value="Internal" icon="ui-icon-star" />
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}"
+							outcome="statuslocal.xhtml" />
+						<p:menuitem value="Alterar" icon="ui-icon-arrowrefresh-1-w"
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}" />
+						<p:menuitem value="Excluir" icon="ui-icon-close"
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}" />
+						<p:menuitem value="External" icon="ui-icon-home"
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}" />
+						<p:menuitem value="Internal" icon="ui-icon-star"
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}" />
 					</p:submenu>
+					<p:submenu label="Usuario">
 
-					<p:submenu label="Usuarios">
 						<p:menuitem value="Cadastrar" icon="ui-icon-disk"
-							outcome="usuario" />
-					</p:submenu>
+							disabled="#{usuarioController.verificaUsuarioLogado() ==false}"
+							outcome="usuario.xhtml" />
 
+					</p:submenu>
 					<f:facet name="options">
-						<p:commandButton icon="ui-icon-home" action="home" ajax="false"
-							immediate="true" />
+						<p:button icon="ui-icon-home" outcome="home.xhtml" />
+						<p:commandButton icon="ui-icon-locked" title="Efetuar Login"
+							onclick="PF('dlgLogin').show()"
+							rendered="#{usuarioController.verificaUsuarioLogado() ==false}" />
+
+						<p:commandButton icon="ui-icon-unlocked" title="Sair"
+							action="usuarioController.logout()" update="fomTemplate"
+							rendered="#{usuarioController.verificaUsuarioLogado() ==true}" />
+						<!-- ui-icon-unlocked -->
+
+						<p:outputLabel />
 					</f:facet>
 				</p:menubar>
+				<div align="right">
+					<p:outputLabel value="Usuario: "
+						rendered="#{usuarioController.verificaUsuarioLogado() ==true}">#{usuarioController.usuarioLogado.nome}</p:outputLabel>
+				</div>
 			</h:form>
 			<ui:insert name="conteudo">
 
@@ -84,7 +111,7 @@
 			resizable="false" draggable="false" responsive="true" modal="true"
 			appendToBody="true">
 			<h:form>
-				<p:messages id="messages"  closable="true" />
+				<p:messages id="messages" closable="true" />
 				<p:panelGrid columns="2">
 					<p:outputLabel value="Nome: " for="nome" />
 					<p:inputText id="nome" value="#{controlador.categoria.nome}"
@@ -104,6 +131,49 @@
 				</p:panelGrid>
 			</h:form>
 		</p:dialog>
+
+		<p:dialog widgetVar="dlgLogin" resizable="false" width="30%"
+			header="login" height="200" draggable="false" responsive="true"
+			modal="true" appendToBody="true">
+			<center>
+				<p:growl id="msg" closable="true" />
+				<h:form id="Login">
+
+					<p:panel style="width: 100%">
+
+						<p:panelGrid columns="2" styleClass="ui-noborder">
+
+							<p:commandButton icon="ui-icon-person" />
+							<p:inputText id="nome" required="true" placeholder="Username"
+								value="#{usuarioController.usuario.username}"
+								requiredMessage="Preencha o campo Username!" />
+
+							<p:commandButton icon="ui-icon-key" />
+							<p:password id="senha" required="true" placeholder="Senha"
+								value="#{usuarioController.usuario.senha}"
+								requiredMessage=" Preencha o campo Senha!" />
+
+						</p:panelGrid>
+						<br />
+						<p:commandButton value="Enviar" style=" height:30px; width:330px "
+							action="#{usuarioController.autenticaUsuario()}"
+							update="fomTemplate" oncomplete="PF('dlgLogin').hide()">
+
+						</p:commandButton>
+						<br />
+						<div align="left">
+							<!-- <input type="checkbox" id="remember-me" name="remember-me" /> <label
+							for="remember-me">Lembrar?</label> -->
+						</div>
+
+					</p:panel>
+
+				</h:form>
+			</center>
+			<label style="font-size: 13px"> Se você não possui uma senha
+				entre em contato com o setor responsável.</label>
+		</p:dialog>
+
 
 	</p:layout>
 	<p:ajaxStatus id="carregando" onstart="PF('dlgStatus').show()"

@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpServletRequest;
@@ -24,12 +25,13 @@ import br.com.linkstvmorena.service.UsuarioService;
 import br.com.linkstvmorena.session.SessionUtil;
 
 @Controller
-@ViewScoped
+@SessionScoped
 public class UsuarioController {
 
 	@Autowired
 	private UsuarioService usuarioService;
 	private UsuarioLogado usuario;
+	private UsuarioLogado usuarioLogado;
 	private List<UsuarioLogado> listagemUsuario;
 	private List<Permissao> listagemPermissao;
 
@@ -106,31 +108,68 @@ public class UsuarioController {
 	public void autenticaUsuario() {
 
 		try {
-			usuarioService.verificaLogin(this.usuario);
-			SessionUtil.setParam("UsuarioLogado", usuario);
+			
+			UsuarioLogado verificaLogin = usuarioService.verificaLogin(this.usuario);
+			
+			if(verificaLogin != null){
+			SessionUtil.setParam("UsuarioLogado", verificaLogin);
+			
 			MenssagemUtil.mensagemInfo("Usuario Autenticado!!");
+			}else{
+				MenssagemUtil.mensagemErro("Usuario nao Autenticado! Verifique seu Usuario e Senha.");
+				usuario = new UsuarioLogado();
+			}
 		} catch (Exception e) {
-			MenssagemUtil.mensagemErro("Usuario nao Autenticado!");
+			MenssagemUtil.mensagemErro("Falha ao verificar Login!");
 		}
 	}
 
+	public String autenticaUsuarioForm() {
+
+		try {
+			
+			UsuarioLogado verificaLogin = usuarioService.verificaLogin(this.usuario);
+			
+			if(verificaLogin != null){
+			SessionUtil.setParam("UsuarioLogado", verificaLogin);
+			
+			MenssagemUtil.mensagemInfo("Usuario Autenticado!!");
+			
+			}else{
+				MenssagemUtil.mensagemErro("Usuario nao Autenticado! Verifique seu Usuario e Senha.");
+				usuario = new UsuarioLogado();
+				return "login";
+			}
+		} catch (Exception e) {
+			MenssagemUtil.mensagemErro("Falha ao verificar Login!");
+		}
+		return "home?faces-redirect=true";
+	}
+
+	
 	public boolean verificaUsuarioLogado() {
 
-		System.out.println("Entrou Verifica UsuaruioLogado!");
+		System.out.println("Entrou Verifica UsuarioLogado!");
+		
 		
 		if (SessionUtil.getParam("UsuarioLogado") != null) {
-			MenssagemUtil.mensagemInfo("Usuario Autenticado!!");
+			usuarioLogado = (UsuarioLogado) SessionUtil.getParam("UsuarioLogado");
+			System.out.println("Usuario logado " + usuario);
 			return true;
 		} else {
-			MenssagemUtil.mensagemErro("Usuario nao Autenticado!");
 			return false;
 		}
 	}
+	
+	public void logout(){
+		SessionUtil.getSession().invalidate();
+		MenssagemUtil.mensagemInfo("Saiu!");
+	}
 
-	public void addMessage(String summary, String detail) {
+	/*public void addMessage(String summary, String detail) {
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
 		FacesContext.getCurrentInstance().addMessage(null, message);
-	}
+	}*/
 
 	public UsuarioLogado getUsuario() {
 		return usuario;
@@ -154,6 +193,14 @@ public class UsuarioController {
 
 	public void setListagemPermissao(List<Permissao> listagemPermissao) {
 		this.listagemPermissao = listagemPermissao;
+	}
+
+	public UsuarioLogado getUsuarioLogado() {
+		return usuarioLogado;
+	}
+
+	public void setUsuarioLogado(UsuarioLogado usuarioLogado) {
+		this.usuarioLogado = usuarioLogado;
 	}
 
 }

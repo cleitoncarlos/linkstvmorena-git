@@ -1,5 +1,9 @@
 package br.com.linkstvmorena.controllers;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -9,9 +13,12 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.servlet.ServletContext;
 
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TransferEvent;
@@ -26,6 +33,7 @@ import br.com.cleiton.Consulta;
 import br.com.correios.bsb.sigep.master.bean.cliente.EnderecoERP;
 import br.com.linkstvmorena.model.Categoria;
 import br.com.linkstvmorena.model.Contato;
+import br.com.linkstvmorena.model.Foto;
 import br.com.linkstvmorena.model.Local;
 import br.com.linkstvmorena.model.Ponto;
 import br.com.linkstvmorena.model.Status;
@@ -35,7 +43,7 @@ import br.com.linkstvmorena.msg.util.MenssagemUtil;
 import br.com.linkstvmorena.service.Servico;
 
 @Controller
-@ViewScoped
+@SessionScoped
 public class Controlador {
 
 	@Autowired
@@ -64,8 +72,31 @@ public class Controlador {
 	private boolean painel;
 	private List<Local> listSearch;
 
+	private Foto foto;
+	private List<Foto> fotos;
+
 	@PostConstruct
 	public void init() {
+
+		try {
+			ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
+					.getContext();
+
+			 fotos = servico.buscaFotos();
+
+			File folder = new File(sContext.getRealPath("/temp"));
+			if (!folder.exists())
+				folder.mkdirs();
+
+			for (Foto f : fotos) {
+				String nomeArquivo = f.getId() + ".jpg";
+				String arquivo = sContext.getRealPath("/temp") + File.separator + nomeArquivo;
+
+				criaArquivo(f.getFoto(), arquivo);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
 		painel = false;
 		listSearch = new ArrayList<Local>();
@@ -82,6 +113,7 @@ public class Controlador {
 		listagemdeponto = new HashSet<>();
 		liststatuslocal = new ArrayList<>();
 		listCategorias = new ArrayList<>();
+		listalocal = new ArrayList<Local>();
 
 		listadestatus = new ArrayList<Status>();
 		for (Status lc : Status.values()) {
@@ -96,18 +128,88 @@ public class Controlador {
 			fonte = new ArrayList<Categoria>();
 			fonte = servico.buscarCategorias();
 			alvo = new ArrayList<Categoria>();
-			System.out.println("Fonte: " + fonte);
 			listcategorias = new DualListModel<Categoria>(fonte, alvo);
 
 		} catch (Exception e) {
 			MenssagemUtil.mensagemErro("Nao Foi Possivel Carregar a Lista!!" + e.getMessage());
 		}
 	}
+	public List<Foto> listaImagens() {
+		fotos = new ArrayList<>();
+
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		ServletContext scontext = (ServletContext) facesContext.getExternalContext().getContext();
+
+		fotos = servico.buscaFotos();
+
+		if (!fotos.isEmpty()) {
+			for (Foto f : fotos) {
+
+				String arquivo = scontext.getRealPath("/img/" + f.getDescricao());
+				byte[] conteudo = f.getFoto();
+				criaArquivo(conteudo, arquivo);
+			}
+		}
+		return fotos;
+	}
+	/*public List<String> getImages()  {
+        
+		System.out.println("Mostrar Fotos!");
+		
+		 fotos = servico.buscaFotos();
+        List<String> images = new ArrayList<String>();
+        
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/temp");
+        
+        for (Foto foto : fotos) {
+        	try{
+              FileOutputStream fos = new FileOutputStream(path + "/" + foto.getDescricao() + ".jpg");
+              fos.write(foto.getFoto());
+              fos.flush();
+              fos.close();
+              images.add(foto.getDescricao() + ".jpg");
+        	}catch (Exception e) {
+        		MenssagemUtil.mensagemErro("Errro ao abrir Foto!");
+			}
+        }
+        
+        return images;
+   }*/
+	
+	private void criaArquivo(byte[] bytes, String arquivo) {
+		FileOutputStream fos;
+
+		try {
+			fos = new FileOutputStream(arquivo);
+			fos.write(bytes);
+
+			fos.flush();
+			fos.close();
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	
+	
+	public void handleFileUpload(FileUploadEvent event) {
+
+		foto = new Foto();
+
+		foto.setDescricao(event.getFile().getFileName());
+		foto.setFoto(event.getFile().getContents());
+
+		servico.salvarFoto(foto);
+
+		FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " Salvo com Sucesso!");
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
 
 	public void selecaoLocal(Local l) {
 		selectedLocal = new Local();
 		selectedLocal = l;
-		System.out.println("Entrou!!");
 	}
 
 	public List<Local> search() {
@@ -119,13 +221,9 @@ public class Controlador {
 				listSearch = servico.buscaLocalTela(busca);
 				if (listSearch.isEmpty()) {
 					MenssagemUtil.mensagemInfo("Local nāo encontrado!!");
-					System.out.println("Nao encontrado!!");
 				}
 			} else
 				return null;
-
-			System.out.println("StringBusca: " + busca);
-			System.out.println("Busca Local: " + listSearch);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -133,12 +231,16 @@ public class Controlador {
 		return null;
 
 	}
-	@RequestMapping("/home") //Define a url que quando for requisitada chamara o metodo
-	public String inicio(){
-		 //Retorna a view que deve ser chamada, no caso home (home.jsp) aqui o .jsp é omitido
+
+	@RequestMapping("/home") // Define a url que quando for requisitada chamara
+								// o metodo
+	public String inicio() {
+		// Retorna a view que deve ser chamada, no caso home (home.jsp) aqui o
+		// .jsp é omitido
 		return "home";
 	}
-	public String home(){
+
+	public String home() {
 		return "home";
 	}
 
@@ -156,12 +258,19 @@ public class Controlador {
 		return "";
 	}
 
-	public Local editar(Local l) {
-		try {
-			init();
-			listalocal = new ArrayList<Local>();
-			listalocal = servico.buscarPorId(l.getId());
-			for (Local ls : listalocal) {
+	public Local editarLocal(Local l) {
+
+		// init();
+
+		System.out.println("Entrou Editar Local!");
+
+		List<Local> buscarPorId = servico.buscarPorId(l.getId());
+
+		if (!buscarPorId.isEmpty()) {
+
+			System.out.println("Editar Local!");
+
+			for (Local ls : buscarPorId) {
 				this.local = ls;
 				this.listagemdeponto = ls.getPonto();
 				this.listadecontato = ls.getContato();
@@ -172,12 +281,11 @@ public class Controlador {
 					this.fonte.remove(posicao);
 					this.alvo.add(posicao);
 				}
+
 			}
 			return this.local;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
+		} else
+			return this.local;
 	}
 
 	public void remover(Local l) {
@@ -502,5 +610,15 @@ public class Controlador {
 	public void setListCategorias(List<Categoria> listCategorias) {
 		this.listCategorias = listCategorias;
 	}
+
+	public List<Foto> getFotos() {
+		return fotos;
+	}
+
+	public void setFotos(List<Foto> fotos) {
+		this.fotos = fotos;
+	}
+	
+	
 
 }

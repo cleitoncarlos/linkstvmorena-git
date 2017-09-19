@@ -69,8 +69,10 @@ public class UsuarioService {
 
 	public UsuarioLogado verificaLogin(UsuarioLogado usuario) throws Exception {
 
+		System.out.println("Usuario: " + usuario.getUsername() + " " + usuario.getSenha());
+		
 		try {
-			String jpql = "Select u from UsuarioLogado u where u.username = :userParam $$ u.senha = :senhaParam";
+			String jpql = "Select u from UsuarioLogado u where u.username = :userParam and u.senha = :senhaParam";
 
 			Query consulta = em.createQuery(jpql);
 
@@ -79,8 +81,11 @@ public class UsuarioService {
 			consulta.setParameter("userParam", usuario.getUsername());
 			consulta.setParameter("senhaParam", senhaMD5);
 			consulta.setMaxResults(1);
+			
+			UsuarioLogado u = (UsuarioLogado) consulta.getSingleResult();
+			System.out.println("Achou usuario: " + u);
 
-			return (UsuarioLogado) consulta.getSingleResult();
+			return u;
 
 		} catch (NoResultException e) {
 			return null;

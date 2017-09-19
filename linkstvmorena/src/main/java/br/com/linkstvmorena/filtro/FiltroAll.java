@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import br.com.linkstvmorena.controllers.UsuarioController;
 import br.com.linkstvmorena.msg.util.MenssagemUtil;
 
 @WebFilter(servletNames = { "Faces Servlet" })
@@ -36,6 +39,7 @@ public class FiltroAll implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
+		
 		HttpServletRequest req = (HttpServletRequest) request;
 
 		HttpServletResponse res = (HttpServletResponse) response;
@@ -53,14 +57,20 @@ public class FiltroAll implements Filter {
 
 		if ((session.getAttribute("UsuarioLogado") != null) || (req.getRequestURI().endsWith("/linkstvmorena/"))
 				|| (req.getRequestURI().endsWith("home.xhtml"))
+				|| (req.getRequestURI().endsWith("usuario.xhtml"))
+				|| (req.getRequestURI().endsWith("login.xhtml"))
 				|| (req.getRequestURI().contains("javax.faces.resource/"))) {
 
 			// redireciona("/Logado.xhtml", response);
+			
+			System.out.println("URI : " + req.getRequestURI());
 
 			chain.doFilter(request, response);
 		}
 
 		else {
+			System.out.println("Acesso Negado !!");
+			System.out.println("URI : " + req.getRequestURI());
 			redireciona("/linkstvmorena/", response);
 		}
 

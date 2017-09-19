@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.linkstvmorena.dao.exception.DAOException;
 import br.com.linkstvmorena.model.Categoria;
+import br.com.linkstvmorena.model.Foto;
 import br.com.linkstvmorena.model.Local;
 import br.com.linkstvmorena.model.Status;
 import br.com.linkstvmorena.model.StatusLocal;
@@ -37,6 +38,17 @@ public class Servico {
 		} catch (Exception e) {
 			throw new Exception("Erro ao cadastrar!: " + e);
 		}
+	}
+
+	@Transactional
+	public void salvarFoto(Foto foto) {
+		em.merge(foto);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Foto> buscaFotos() {
+		Query consulta = em.createQuery("select f from Foto f");
+		return consulta.getResultList();
 	}
 
 	@Transactional
@@ -90,14 +102,22 @@ public class Servico {
 
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<Local> buscarPorId(Integer id) throws ServiceException {
-		String busca = "select DISTINCT l from Local l " + " left Join fetch l.ponto p "
-				+ "  left Join fetch l.contato ct" + " left Join fetch l.categoria c" + " Where l.id=:idParam "
-				+ "order by l.nome ASC";
+	public List<Local> buscarPorId(Integer id) {
+		try {
 
-		Query consulta = em.createQuery(busca);
-		consulta.setParameter("idParam", id);
-		return consulta.getResultList();
+			System.out.println("Entrou BuscaPorId!");
+
+			String busca = "select DISTINCT l from Local l " + " left Join fetch l.ponto p "
+					+ "  left Join fetch l.contato ct" + " left Join fetch l.categoria c" + " Where l.id=:idParam "
+					+ "order by l.nome ASC";
+
+			Query consulta = em.createQuery(busca);
+			consulta.setParameter("idParam", id);
+			return consulta.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+
 	}
 
 	public Local buscaParaExcluir(Integer id) throws ServiceException {
@@ -123,7 +143,6 @@ public class Servico {
 			if (categoria.getId() == null) {
 				Categoria categoriaBusca = buscarPorNome(categoria);
 				if (categoriaBusca != null) {
-					System.out.println(categoriaBusca.getId());
 					throw new ServiceException("Categoria ja  Cadastrada!", null);
 				}
 			}
@@ -143,12 +162,12 @@ public class Servico {
 			return null;
 		}
 	}
-	
-	public Categoria buscaPorNome(String nome) throws Exception  {
+
+	public Categoria buscaPorNome(String nome) throws Exception {
 
 		try {
 			String jpql = "Select c from Categoria c where lower(c.nome)=lower(:nomeParam)";
-			
+
 			Query consulta = em.createQuery(jpql);
 
 			consulta.setParameter("nomeParam", nome);
@@ -158,10 +177,11 @@ public class Servico {
 			// engolir a exception
 			return null;
 		} catch (Exception causa) {
-			throw new Exception ("Erro ao Buscar nome!! " + causa);
-			
+			throw new Exception("Erro ao Buscar nome!! " + causa);
+
 		}
 	}
+
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<Categoria> buscarCategorias() {

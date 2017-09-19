@@ -16,7 +16,7 @@
 				<!-- Cadastro de Endereço -->
 				<p:tab id="endereco" title="Endereço">
 					<p:panel header="Detalhes do Endereço">
-						<p:panelGrid >
+						<p:panelGrid style="width:100%;">
 							<p:row>
 								<p:column rowspan="2">
 									<h:panelGrid columns="2" columnClasses="label, value"
@@ -73,34 +73,39 @@
 									</h:panelGrid>
 								</p:column>
 								<p:column>
-									<p:panelGrid columns="2" styleClass="ui-noborder">
+									<p:panelGrid styleClass="ui-noborder">
 										<p:column>
-											<p:outputLabel value="Vincular Categoria: " />
-										</p:column>
-										<p:column width="30">
 
-											<p:commandButton id="dialog" value="Cadastrar nova Categoria"
-												icon="ui-icon-extlink" type="button"
-												onclick="PF('dlg').show()" update="@form pick" />
 										</p:column>
 									</p:panelGrid>
 								</p:column>
 
 							</p:row>
-							<p:column colspan="3" >
-								<p:growl id="msg" escape="false" />
-								<p:pickList id="pick" value="#{controlador.listcategorias}"
-									var="categoria" addLabel="Adicionar" required="true"
-									requiredMessage="Selecione uma Categoria"
-									addAllLabel="Selecionar todos" removeLabel="Remover"
-									removeAllLabel="Remover todos" itemLabel="#{categoria.nome}"
-									itemValue="#{categoria}" converter="categoriaConverter">
-									<p:ajax event="transfer"
-										listener="#{controlador.adicionaCategoria()}" update="msg" />
+							<p:row>
+								<p:column>
+									<p:growl id="msg" escape="false" />
 
-								</p:pickList>
-							</p:column>
-							
+									<center>
+										<p:outputLabel value="Vincular Categoria: " />
+										<p:spacer height="10" />
+
+										<p:pickList id="pick" value="#{controlador.listcategorias}"
+											var="categoria" addLabel="Adicionar" required="true"
+											requiredMessage="Selecione uma Categoria" responsive="true"
+											addAllLabel="Selecionar todos" removeLabel="Remover"
+											removeAllLabel="Remover todos" itemLabel="#{categoria.nome}"
+											itemValue="#{categoria}" converter="categoriaConverter">
+											<p:ajax event="transfer"
+												listener="#{controlador.adicionaCategoria()}" update="msg" />
+
+										</p:pickList>
+									</center>
+									<br />
+									<p:commandButton id="dialog" value="Cadastrar nova Categoria"
+										icon="ui-icon-extlink" type="button"
+										onclick="PF('dlg').show()" update="@form pick" />
+								</p:column>
+							</p:row>
 						</p:panelGrid>
 						<!-- 
 						<h:outputText value="ir para o último: " />

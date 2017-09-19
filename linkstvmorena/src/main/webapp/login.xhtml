@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="form">
+			<center>
+
+				<p:messages id="messages" closable="true" />
+
+				<!-- <p:panel header=" Login" style="width: 25%">
+
+					<p:panelGrid columns="2" styleClass="ui-noborder">
+
+						<p:commandButton icon="ui-icon-person" />
+						<p:inputText id="nome" required="true"  placeholder="Username"
+							requiredMessage="Preencha o campo Username!" />
+
+						<p:commandButton icon="ui-icon-key"/>
+						<p:password id="senha" required="true" placeholder="Senha"
+							requiredMessage=" Preencha o campo Senha!" />
+
+					</p:panelGrid>
+					<p:spacer height="10px"/>
+					<p:commandButton value="Enviar" style=" height:30px; width:330px "
+						process="@form" update="@form :cadCategoria">
+
+					</p:commandButton>
+					<br />
+					<div align="left">
+						<input type="checkbox" id="remember-me" name="remember-me" /> <label
+							for="remember-me">Lembrar?</label>
+					</div>
+
+				</p:panel> -->
+				
+				<p:panel header="Login" style="width: 30%">
+
+						<p:panelGrid columns="2" styleClass="ui-noborder">
+
+							<p:commandButton icon="ui-icon-person" />
+							<p:inputText id="nome" required="true" placeholder="Username"
+								value="#{usuarioController.usuario.username}"
+								requiredMessage="Preencha o campo Username!" />
+
+							<p:commandButton icon="ui-icon-key" />
+							<p:password id="senha" required="true" placeholder="Senha"
+								value="#{usuarioController.usuario.senha}"
+								requiredMessage=" Preencha o campo Senha!" />
+
+						</p:panelGrid>
+						<br />
+						<p:commandButton value="Enviar" style=" height:30px; width:330px "
+							action="#{usuarioController.autenticaUsuarioForm()}"
+							update="form" oncomplete="PF('dlgLogin').hide()">
+
+						</p:commandButton>
+						<br />
+						<div align="left">
+							<!-- <input type="checkbox" id="remember-me" name="remember-me" /> <label
+							for="remember-me">Lembrar?</label> -->
+						</div>
+
+					</p:panel>
+
+			</center>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
